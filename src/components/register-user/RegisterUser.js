@@ -1,13 +1,17 @@
-import { Auth } from 'aws-amplify';
 import React, {useState} from 'react';
 import { User } from '../../model/user';
 import './style.css'
+import addUser from '../../services/dmservice'
+import { Auth } from 'aws-amplify';
+
+import {CANDIDATE} from '../../model/Constants'
+
+
 function RegisterUser() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [password,setPassword] = useState("");
-    const [confirmPassword,setConfirmPassword] = useState("");
+    const [phoneNumber,setPhoneNumber] = useState("");
 
     const handleInputChange = (e) => {
         const {id , value} = e.target;
@@ -20,11 +24,8 @@ function RegisterUser() {
         if(id === "email"){
             setEmail(value);
         }
-        if(id === "password"){
-            setPassword(value);
-        }
-        if(id === "confirmPassword"){
-            setConfirmPassword(value);
+        if(id === "phoneNumber"){
+            setPhoneNumber(value);
         }
 
     }
@@ -34,24 +35,20 @@ function RegisterUser() {
         user.firstName = firstName;
         user.lastName = lastName;
         user.email = email;
-        user.password = password;
+        user.phoneNumber = phoneNumber
         console.log(user);
         try {
-            Auth.signUp({
-                username:email,
-                password:password,
-                attributes: {
-                    email:email, 
-                    given_name: firstName,
-                    family_name: lastName,
-                    phone_number: "+15555555555",
-                    "custom:user_type": "candidate",
-                },
-                autoSignIn: { // optional - enables auto sign in after user is confirmed
-                    enabled: true,
-                }
-            });
+
+            Auth.currentAuthenticatedUser()
+                .then(data => {
+                    user.userType = CANDIDATE;
+                    addUser(user, data.signInUserSession.idToken.jwtToken);
+                })
+                .then(data => console.log(data))
+                .catch(err => console.log(err));
+
             console.log(user);
+            
         } catch (error) {
             console.log('error signing up:', error);
         }
@@ -74,13 +71,9 @@ function RegisterUser() {
                     <label>Email </label>
                     <input  type="email" id="email"  value={email} onChange = {(e) => handleInputChange(e)} placeholder="Email"/>
                 </div>
-                <div className="password">
-                    <label>Password </label>
-                    <input  type="password"  id="password" value={password} onChange = {(e) => handleInputChange(e)} placeholder="Password"/>
-                </div>
-                <div className="confirm-password">
-                    <label>Confirm Password </label>
-                    <input  type="password" id="confirmPassword" value={confirmPassword} onChange = {(e) => handleInputChange(e)} placeholder="Confirm Password"/>
+                <div className="phoneNumber">
+                    <label>Phone Number </label>
+                    <input  type="phoneNumber" id="phoneNumber"  value={phoneNumber} onChange = {(e) => handleInputChange(e)} placeholder="phoneNumber"/>
                 </div>
             </div>
             <div className="footer">

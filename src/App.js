@@ -4,10 +4,10 @@ import {Amplify} from 'aws-amplify'
 import config from './aws-exports'
 import '@aws-amplify/ui-react/styles.css'
 import { Routes, Route } from "react-router-dom"
-import Login from './component/login/Login'
-import RegisterUser from './component/signup/RegisterUser'
-import ConfirmUser from './component/confirm-user/confirmuser'
-import Document from './component/document/document'
+import Login from './components/login/Login'
+import RegisterUser from './components/register-user/RegisterUser'
+import ConfirmUser from './components/confirm-user/confirmuser'
+import Document from './components/document/document'
 
 
 Amplify.configure(config)

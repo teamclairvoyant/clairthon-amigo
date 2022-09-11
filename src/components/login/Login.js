@@ -33,7 +33,12 @@ function Login(){
     try {
         const user = await Auth.signIn(email, password);
         console.log('user signing in', user);
-   
+                Auth.currentAuthenticatedUser()
+                .then(data => {
+                    alert("user signin successful for :" + data)
+                })
+                .then(data => console.log(data))
+                .catch(err => console.log(err));
         goToRegister();
     } catch (error) {
         console.log('error signing in', error);
