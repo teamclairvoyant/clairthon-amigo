@@ -1,12 +1,16 @@
 import React, {useState}from "react";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
+import { CANDIDATE } from "../../model/Constants";
 
 function Login(){
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loggedInUsrType, setLoggedInUserType] = useState("");
 
+  Auth.currentUserInfo()
+        .then((userInfo) => setLoggedInUserType(userInfo.attributes["custom:user_type"]));
 
   let navigate = useNavigate();
 
@@ -39,7 +43,10 @@ function Login(){
                 })
                 .then(data => console.log(data))
                 .catch(err => console.log(err));
-        goToRegister();
+
+        if(loggedInUsrType !== CANDIDATE){
+          goToRegister();
+        }
     } catch (error) {
         console.log('error signing in', error);
         if(error.code === 'UserNotConfirmedException'){
