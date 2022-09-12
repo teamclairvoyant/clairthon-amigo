@@ -8,6 +8,7 @@ import Login from './components/login/Login'
 import RegisterUser from './components/register-user/RegisterUser'
 import ConfirmUser from './components/confirm-user/confirmuser'
 import Document from './components/document/document'
+import SetNewPassword from './components/login/SetNewPassword'
 
 
 Amplify.configure(config)
@@ -21,6 +22,7 @@ function App() {
         <Route path="register" element={ <RegisterUser/> } />
         <Route path="document" element={ <Document/> } />
         <Route path="confirm-user" element={ <ConfirmUser/> } />
+        <Route path="set-new-password" element={ <SetNewPassword/> } />
       </Routes>
     </div>
   );

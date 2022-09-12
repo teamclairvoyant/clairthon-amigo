@@ -8,6 +8,7 @@ function Login(){
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedInUsrType, setLoggedInUserType] = useState("");
+  const [userObj, setUserObj] = useState("");
 
   Auth.currentUserInfo()
         .then((userInfo) => setLoggedInUserType(userInfo.attributes["custom:user_type"]));
@@ -23,30 +24,34 @@ function Login(){
       setPassword(value);
   }
   }
+  const goToSetPassword = (user) => {
+    setUserObj(user)
+    navigate("/set-new-password", {state:{currentUser: userObj}});
+  };
   const goToRegister = () => {
     navigate("/register");
   };
   const goToConfirmPage = () => {
     navigate("/confirm-user", 
-    { state: { username: email } }
+      { state: { username: email } }
     );
   };
 
   async function handleSignIn() {
     
     try {
-        const user = await Auth.signIn(email, password);
-        console.log('user signing in', user);
-                Auth.currentAuthenticatedUser()
-                .then(data => {
-                    alert("user signin successful for :" + data)
-                })
-                .then(data => console.log(data))
-                .catch(err => console.log(err));
-
-        if(loggedInUsrType !== CANDIDATE){
-          goToRegister();
-        }
+        await Auth.signIn(email, password)
+        .then((user)=>{
+          if(user.challengeName === 'NEW_PASSWORD_REQUIRED'){
+            goToSetPassword(user);
+          }
+          else if(loggedInUsrType !== CANDIDATE){
+            goToRegister();
+          }
+        }).catch(err => {
+            console.log(err)
+        });
+        
     } catch (error) {
         console.log('error signing in', error);
         if(error.code === 'UserNotConfirmedException'){

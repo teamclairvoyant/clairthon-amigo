@@ -1,28 +1,34 @@
-import React, {useState}from "react";
+import React, {useState} from "react";
 import { Auth } from "aws-amplify";
 import { useNavigate, useLocation } from "react-router-dom";
 
-function ConfirmUser(){
-  const [code, setCode] = useState("");
+function SetNewPassword({props}){
+  const [password, setPassword] = useState("");
   let navigate = useNavigate();
   const { state } = useLocation();
-  const username = state.username;
+  const userObj = state.userObj;
+
 
   const handleInputChange = (e) => {
     const {id, value} = e.target;
-        if(id === "confirmCode"){
-            setCode(value);
+        if(id === "password"){
+            setPassword(value);
         }
-    }
-
+      }
   const goToDocumentPage = () => {
     navigate("/document");
   };
 
-  async function confirmSignUp() {
+  async function SetNewPassword() {
     try {
-      await Auth.confirmSignUp(username, code);
-      goToDocumentPage()
+        Auth.completeNewPassword(userObj, password).then(user => {
+          // at this time the user is logged in if no MFA required
+          console.log(userObj);
+          goToDocumentPage();
+        }).catch(e => {
+          console.log(e);
+        });
+      
     } catch (error) {
         console.log('error confirming sign up', error);
     }
@@ -39,19 +45,19 @@ function ConfirmUser(){
 
     return (
       <div>
-            <label>Enter confirmation Code</label>
+            <label>Enter new password</label>
             <input
               type="text"
-              placeholder="Enter code"
-              id="confirmCode"
+              placeholder="Enter password"
+              id="password"
               onChange = {(e) => handleInputChange(e)}
             />
           <div>
         </div>
-        <button onClick={()=>confirmSignUp()} type="submit" className="btn">Confirm</button>
+        <button onClick={()=>SetNewPassword()} type="submit" className="btn">Confirm</button>
         <button onClick={()=>handleSignOut()} type="submit" className="btn">SignOut</button>
         </div>
       
     );
 }
-export default ConfirmUser;
+export default SetNewPassword;
