@@ -1,0 +1,36 @@
+.backImg{
+  background-image: url('../../../public/clair-logo-white.svg');
+}
+.backgroundColor {
+    background-color: wheat;
+}
+
+.tenantLogoContainer {
+    min-height: 5rem;
+    @apply pt-8;
+}
+
+.loginButton {
+    @apply w-20 h-12;
+    padding-bottom: 10px;
+}
+
+.gradeButtonWrapper {
+    @apply pr-4;
+  
+    &:last-of-type {
+      @apply pr-0;
+    }
+  
+    .gradeButton {
+      @apply text-xs w-full max-h-2;
+    }
+  }
+
+  .errorLabelUrlAndTitle {
+    @apply pt-2 pb-1 mt-3 text-sm;
+  }
+
+  .label {
+    @apply pt-2 text-sm;
+  }
