@@ -1,13 +1,11 @@
-import React, { useCallback, useState } from "react";
-import { Auth } from "aws-amplify";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { CANDIDATE } from "../../model/Constants";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import styles from "../login/Login.module.scss";
 import TextBox from "../common/TextField";
 import { COPY } from "../../constant";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "@mui/material/Link";
@@ -15,7 +13,7 @@ import Login from '../login/Login';
 
 function ForgotPassword() {
   const validationSchema = yup.object({
-    email: yup.string().trim().required(COPY.EMAIL_REQUIRED),
+    email: yup.string().email(COPY.ENTER_VALID_EMAIL).trim().required(COPY.EMAIL_REQUIRED),
   });
 
   
@@ -59,7 +57,7 @@ function ForgotPassword() {
         className={`h-screen flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}
       >
         <main
-          className={`${styles.backgroundColor} max-w-md px-12 self-center rounded mx-auto`}
+          className={`${styles.backgroundColor} w-full max-w-md px-12 self-center rounded mx-auto`}
         >
           <h5 className="text-center font-semibold text-main pt-2">
             {COPY.FORGOT_PASSWORD}
@@ -68,7 +66,7 @@ function ForgotPassword() {
             <Controller
               control={control}
               name={"email"}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange, value,onBlur } }) => (
                 <TextBox
                   fullWidth
                   id="email"
@@ -76,6 +74,7 @@ function ForgotPassword() {
                   label="Email"
                   value={value}
                   onChange={onChange}
+                  onBlur={onBlur}
                 />
               )}
             />

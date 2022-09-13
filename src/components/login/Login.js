@@ -11,7 +11,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "@mui/material/Link";
-import ForgotPassword from '../forgot-password/ForgotPassword'
+import ForgotPassword from "../forgot-password/ForgotPassword";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ function Login() {
   const [userObj, setUserObj] = useState("");
 
   const validationSchema = yup.object({
-    email: yup.string().trim().required(COPY.EMAIL_REQUIRED),
+    email: yup.string().email(COPY.ENTER_VALID_EMAIL).trim().required(COPY.EMAIL_REQUIRED),
     password: yup.string().trim().required(COPY.PASSWORD_REQUIRED),
   });
 
@@ -120,15 +120,17 @@ function Login() {
     setPassword(getValues("password"));
     handleSignIn();
   };
-  const goToForgotPassword=useCallback(()=>{
+  const goToForgotPassword = useCallback(() => {
     navigate("/ForgotPassword", { state: { username: email } });
-  },[email,navigate]);
+  }, [email, navigate]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
-      <div className={`h-screen flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}>
+      <div
+        className={`h-screen flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}
+      >
         <main
-          className={`${styles.backgroundColor} max-w-md px-12 self-center rounded mx-auto`}
+          className={`${styles.backgroundColor} w-full max-w-md px-12 self-center rounded mx-auto`}
         >
           <div className={styles.tenantLogoContainer}>
             <img
@@ -144,7 +146,7 @@ function Login() {
             <Controller
               control={control}
               name={"email"}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange, value, onBlur } }) => (
                 <TextBox
                   fullWidth
                   id="email"
@@ -152,6 +154,7 @@ function Login() {
                   label="Email"
                   value={value}
                   onChange={onChange}
+                  onBlur={onBlur}
                 />
               )}
             />
@@ -163,7 +166,7 @@ function Login() {
             <Controller
               control={control}
               name={"password"}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange, value, onBlur } }) => (
                 <TextBox
                   fullWidth
                   id="password"
@@ -171,6 +174,7 @@ function Login() {
                   label="Password"
                   value={value}
                   onChange={onChange}
+                  onBlur={onBlur}
                 />
               )}
             />
@@ -192,7 +196,12 @@ function Login() {
             </span>
           </div>
           <div className="pb-4">
-          <Link className="ml-1 pb-4 cursor-pointer" onClick={goToForgotPassword}>{COPY.FORGOT_PASSWORD}</Link>
+            <Link
+              className="ml-1 pb-4 cursor-pointer"
+              onClick={goToForgotPassword}
+            >
+              {COPY.FORGOT_PASSWORD}
+            </Link>
           </div>
         </main>
       </div>
