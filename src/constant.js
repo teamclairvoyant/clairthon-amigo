@@ -4,10 +4,11 @@ export const COPY = {
     SIGN_IN: 'SignIn',
     ALT_TEXT_LOGO: 'Clairvoyant by an EXL',
     EMAIL_REQUIRED: 'Email Required',
+    ENTER_VALID_EMAIL:'Enter Valid Email',
     PASSWORD_REQUIRED: 'Password Required',
     EMAIL: 'Email',
     PASSWORD:'Password', 
-    FORGOT_PASSWORD: 'Forgot password',
+    FORGOT_PASSWORD: 'Forgot Password',
     BACK: 'Back',
     SEND:'Send',
 
