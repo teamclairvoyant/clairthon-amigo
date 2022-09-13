@@ -1,5 +1,5 @@
 import React from 'react'
-import './App.css'
+import './App.scss'
 import {Amplify} from 'aws-amplify'
 import config from './aws-exports'
 import '@aws-amplify/ui-react/styles.css'
@@ -9,7 +9,7 @@ import RegisterUser from './components/register-user/RegisterUser'
 import ConfirmUser from './components/confirm-user/confirmuser'
 import Document from './components/document/document'
 import SetNewPassword from './components/login/SetNewPassword'
-
+import ForgotPassword from './components/forgot-password/ForgotPassword'
 
 Amplify.configure(config)
 
@@ -23,6 +23,7 @@ function App() {
         <Route path="document" element={ <Document/> } />
         <Route path="confirm-user" element={ <ConfirmUser/> } />
         <Route path="set-new-password" element={ <SetNewPassword/> } />
+        <Route path="ForgotPassword" element={ <ForgotPassword/> } />
       </Routes>
     </div>
   );
