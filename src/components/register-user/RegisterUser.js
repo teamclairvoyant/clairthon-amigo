@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User } from '../../model/user';
-import './style.css'
+import styles from './RegisterUser.module.scss'
 import addUser from '../../services/dmservice'
 import { Auth } from 'aws-amplify';
 

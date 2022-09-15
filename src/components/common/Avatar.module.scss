@@ -1,0 +1,11 @@
+.avatar {
+    @apply font-semibold shadow-md ;
+    border: 2px solid white;
+    font-size: 96%;
+  }
+  
+  .disabledAvatar {
+    @extend .avatar;
+    filter: opacity(0.8);
+  }
+  
