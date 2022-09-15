@@ -1,0 +1,72 @@
+.headertext {
+  color: #000000;
+  font-family: Helvetica;
+  font-weight: bold;
+  letter-spacing: 0.25px;
+  font-size: 1rem;
+}
+
+.imgSubText {
+  color: #48525b;
+  font-family: Helvetica;
+  font-size: 1rem;
+
+  @media (max-width: 600px) {
+    padding: 9px 0 !important;
+  }
+}
+
+.parentDiv {
+  @media (max-width: 1024px) {
+    display: block;
+    padding: 0 14px;
+  }
+
+  @media (min-width: 600px) and (max-width: 1023px) {
+    display: flex;
+    padding: 0 4px;
+  }
+
+  @media (max-width: 600px) {
+    display: block;
+    padding: 0 4px;
+  }
+}
+
+.footerPadding {
+  @media (max-width: 600px) {
+    padding-left: 26px;
+    padding-top: 0px;
+    padding-bottom: 21px;
+  }
+}
+
+.maxHeight {
+  @media (min-width: 600px) and (max-width: 768px) {
+    max-height: 144px;
+    height: 142px;
+  }
+}
+
+.padding {
+  @media (max-width: 400px) {
+    padding: 0 20px !important;
+  }
+}
+
+.startExploreBtn {
+  background-color: #1976d2 !important;
+  &:focus {
+    outline: 1px dotted black;
+  }
+}
+
+.bgGren {
+  background-color: green;
+  height: 1rem;
+}
+
+.bgRed {
+  background-color: brown;
+  height: 1rem;
+}

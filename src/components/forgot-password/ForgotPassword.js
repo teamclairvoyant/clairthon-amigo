@@ -9,7 +9,9 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "@mui/material/Link";
-import Login from '../login/Login';
+import Toster from "../common/Toster";
+import { toast } from "react-toastify";
+import { Auth } from "aws-amplify";
 
 function ForgotPassword() {
   const validationSchema = yup.object({
@@ -22,9 +24,6 @@ function ForgotPassword() {
   const {
     handleSubmit,
     control,
-    setValue,
-    setError,
-    reset,
     getValues,
     formState: { errors },
   } = useForm({
@@ -42,10 +41,24 @@ function ForgotPassword() {
     // setLoader(false);
   }, []);
 
-  const onSubmit = () => {
-  //  setEmail(getValues("email"));
-  //  handleSignIn();
-  };
+  const onSubmit = useCallback(async() => {
+   //setEmail(getValues("email"));
+  try {
+    await Auth.forgotPassword(getValues("email"))
+      .then((user) => {
+        if (user) {
+          navigate("/register");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        console.log(err.message);
+      });
+  } catch (error) {
+    toast.error("Error Occured Please try again later");
+    console.log("error signing in", error);
+  }
+  },[getValues,navigate]);
 
   const goBack=useCallback(()=>{
     navigate("/login");
@@ -78,7 +91,7 @@ function ForgotPassword() {
                 />
               )}
             />
-            <FormHelperText className="text-red">
+            <FormHelperText className={styles.errorMessage}>
               {errors?.email && errors.email.message}
             </FormHelperText>
           </div>
@@ -100,6 +113,7 @@ function ForgotPassword() {
           </div>
         </main>
       </div>
+      <Toster/>
     </form>
   );
 }

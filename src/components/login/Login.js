@@ -7,11 +7,12 @@ import FormHelperText from "@mui/material/FormHelperText";
 import styles from "./Login.module.scss";
 import TextBox from "../common/TextField";
 import { COPY } from "../../constant";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "@mui/material/Link";
-import ForgotPassword from "../forgot-password/ForgotPassword";
+import Toster from "../common/Toster";
+import { toast } from "react-toastify";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -27,9 +28,6 @@ function Login() {
   const {
     handleSubmit,
     control,
-    setValue,
-    setError,
-    reset,
     getValues,
     formState: { errors },
   } = useForm({
@@ -44,9 +42,13 @@ function Login() {
 
   console.log(errors);
 
-  // Auth.currentUserInfo().then((userInfo).catch(e) =>
+  // Auth.currentUserInfo()
+  // .then((userInfo)=>{
   //   setLoggedInUserType(userInfo?.attributes["custom:user_type"])
-  // );
+  // })
+  // .catch((e) =>{
+  //     console.log(e);
+  // });
 
   let navigate = useNavigate();
 
@@ -85,9 +87,11 @@ function Login() {
           }
         })
         .catch((err) => {
-          console.log(err);
+          toast.error(err.message);
+          console.log(err.message);
         });
     } catch (error) {
+      toast.error("Incorrect username or password");
       console.log("error signing in", error);
       if (error.code === "UserNotConfirmedException") {
         goToConfirmPage();
@@ -111,8 +115,6 @@ function Login() {
   }, []);
 
   const onError = useCallback(() => {
-    //notificationService.showError(COPY.VALIDATION_ENTER_ALL_FIELDS);
-    // setLoader(false);
   }, []);
 
   const onSubmit = () => {
@@ -158,7 +160,7 @@ function Login() {
                 />
               )}
             />
-            <FormHelperText className="text-red">
+            <FormHelperText className={styles.errorMessage}>
               {errors?.email && errors.email.message}
             </FormHelperText>
           </div>
@@ -178,7 +180,7 @@ function Login() {
                 />
               )}
             />
-            <FormHelperText className="text-red">
+            <FormHelperText className={styles.errorMessage}>
               {errors?.password && errors.password.message}
             </FormHelperText>
           </div>
@@ -203,8 +205,11 @@ function Login() {
               {COPY.FORGOT_PASSWORD}
             </Link>
           </div>
+          <div>
+          </div>
         </main>
       </div>
+      <Toster/>
     </form>
   );
 }
