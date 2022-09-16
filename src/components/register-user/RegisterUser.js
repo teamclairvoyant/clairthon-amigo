@@ -40,7 +40,6 @@ function RegisterUser() {
         user.lastName = lastName;
         user.email = email;
         user.phoneNumber = phoneNumber
-        console.log(user);
         try {
 
             Auth.currentAuthenticatedUser()

@@ -11,6 +11,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
+import User from "../Hooks/useAuth";
+
 /**
  * Header that is displayed at the top of every page that uses the Main layout
  */
@@ -18,6 +20,7 @@ function Header(props) {
   const { onLogout } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const user = User();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -57,14 +60,14 @@ function Header(props) {
                 <>
                   <div className="ml-0 xs:ml-2">
                     <Profile
-                      firstName="Sandeep"
-                      lastName="Pawar"
+                      firstName={user?.given_name}
+                      lastName={user?.family_name}
                       bgColor="#6734ba"
                     />
                   </div>
                   <span className="mr-1 text-lg text-white leading-4 text-left font-display-bold md:ml-3">
                     <span className="hidden md:inline-block">
-                      {"sandeep"} {"pawar"}
+                    {user?.given_name} {user?.family_name}
                     </span>
                   </span>
                 </>
@@ -109,7 +112,7 @@ function Header(props) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem>
-          <Avatar/> {COPY.PROFILE}
+          <Avatar /> {COPY.PROFILE}
         </MenuItem>
         <Divider />
         <MenuItem onClick={onLogout}>{COPY.LOGOUT}</MenuItem>

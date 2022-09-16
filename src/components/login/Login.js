@@ -40,7 +40,6 @@ function Login() {
     resolver: yupResolver(validationSchema),
   });
 
-  console.log(errors);
 
   // Auth.currentUserInfo()
   // .then((userInfo)=>{
@@ -88,11 +87,9 @@ function Login() {
         })
         .catch((err) => {
           toast.error(err.message);
-          console.log(err.message);
         });
     } catch (error) {
       toast.error("Incorrect username or password");
-      console.log("error signing in", error);
       if (error.code === "UserNotConfirmedException") {
         goToConfirmPage();
       }
@@ -174,6 +171,7 @@ function Login() {
                   id="password"
                   name="password"
                   label="Password"
+                  type='password'
                   value={value}
                   onChange={onChange}
                   onBlur={onBlur}

@@ -6,7 +6,6 @@ import Footer from '../HOCS/Footer'
  */
 function withHeader(WrappedComponent) {
   const onLogout = () => {
-    console.log("logout");
   };
 
   function withHeaderHOC() {
