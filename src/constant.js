@@ -33,5 +33,9 @@ export const COPY = {
   VERSION: 'Version 1.0',
   REGISTER_CANDIDATE:'Register Candidate',
   REGISTER:'Register',
-  SUBMIT: "Submit"
+  SUBMIT: "Submit",
+  REGISTER_USER: "Register User",
+  FIRST_NAME_REQUIRED:"First name required",
+  LAST_NAME_REQUIRED:"Last name required",
+  PHONE_NUMBER_REQUIRED: "Phone number required"
 };

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import TreeItem from '@mui/lab/TreeItem';
-import TreeView from '@mui/lab/TreeView';
+import TreeView from '@mui/lab/TreeView/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -40,17 +40,18 @@ function RequestDocuments() {
       },[]);
 
     return (
+      <section className="conatiner mt-8 mb-20 h-full">
         <form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className={`h-screen flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}>
+          <div className={`flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}>
             <main
-              className={`${styles.backgroundColor} max-w-md px-12 self-center rounded mx-auto`}
+              className={`${styles.backgroundColor} mb-20 max-w-md px-12 self-center rounded mx-auto`}
             >
               <TreeView
                    aria-label="multi-select"
                    defaultCollapseIcon={<ExpandMoreIcon />}
                    defaultExpandIcon={<ChevronRightIcon />}
                    multiSelect
-                   sx={{ height: 216, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+                   sx={{ height: 200, flexGrow: 1, maxWidth: 400, overflowY: 'auto' ,marginTop: 5 }}
                 >
                     <TreeItem nodeId="1" label="Personal document">
                         <TreeItem nodeId="2" label="Pan card" ></TreeItem>
@@ -82,6 +83,7 @@ function RequestDocuments() {
             </main>
           </div>
         </form>
+        </section>
       );
 }
 export default withHeader(RequestDocuments);
