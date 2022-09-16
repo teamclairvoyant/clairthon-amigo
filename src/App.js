@@ -10,6 +10,7 @@ import ConfirmUser from './components/confirm-user/confirmuser'
 import Document from './components/document/document'
 import SetNewPassword from './components/login/SetNewPassword'
 import ForgotPassword from './components/forgot-password/ForgotPassword'
+import RequestDocuments from './components/request-document/RequestDocuments'
 
 Amplify.configure(config)
 
@@ -24,6 +25,8 @@ function App() {
         <Route path="confirm-user" element={ <ConfirmUser/> } />
         <Route path="set-new-password" element={ <SetNewPassword/> } />
         <Route path="ForgotPassword" element={ <ForgotPassword/> } />
+        <Route path="request-documents" element={ <RequestDocuments/> } />
+        
       </Routes>
     </div>
   );

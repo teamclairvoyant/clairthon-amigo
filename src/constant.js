@@ -31,4 +31,7 @@ export const COPY = {
   ALL_RIGHTS_RESERVED: "All Rights Reserved",
   CLV: "Clairvoyant by an EXL",
   VERSION: 'Version 1.0',
+  REGISTER_CANDIDATE:'Register Candidate',
+  REGISTER:'Register',
+  SUBMIT: "Submit"
 };
