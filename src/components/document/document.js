@@ -6,6 +6,7 @@ import styles from "../document/document.module.scss";
 import LinearProgressWithLabel from "../common/ProgressBar";
 import Toster from "../common/Toster";
 import { toast } from "react-toastify";
+import  User  from "../Hooks/useAuth";
 
 function Document() {
   const handleFileSelection = async (files) => {};
@@ -14,9 +15,9 @@ function Document() {
   const [isComplete, setIsComplete] = useState(false);
   const [fileName, setFileName] = useState("");
   const [fileArray, setFileArray] = useState(null);
+  const user = User();
 
   const uploadFile = useCallback(async (file, name) => {
-    console.log(file, name);
     if (file.length > 0) {
       setFileName(file[0]?.name);
       setFileArray(file);
@@ -27,16 +28,15 @@ function Document() {
     }
   }, []);
 
-  console.log(fileArray);
   return (
     <section className={styles.BgColor}>
       <div>
-      <h1 className="text-center font-bold font-lg text-main">
-        {COPY.WELCOME} {"Sandeep Pawar"}
-      </h1>
-      <p className="text-center font-bold font-lg text-main">
-        {COPY.ACTION_ITEMS}
-      </p>
+        <h1 className="text-center font-bold font-lg text-main">
+          {COPY.WELCOME} {user?.given_name} {user?.family_name}
+        </h1>
+        <p className="text-center font-bold font-lg text-main">
+          {COPY.ACTION_ITEMS}
+        </p>
       </div>
       <div className="flex font-bold font-lg mx-12">
         <h1>{COPY.ACTION_REQUIRED}</h1>

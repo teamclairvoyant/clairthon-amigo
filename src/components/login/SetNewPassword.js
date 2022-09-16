@@ -6,7 +6,6 @@ function SetNewPassword({props}){
   const [password, setPassword] = useState("");
   let navigate = useNavigate();
   const { state } = useLocation();
-  console.log('state',useLocation);
   const userObj = state.userObj;
 
 

@@ -12,7 +12,6 @@ const formatString = (source, ...formatParams) => {
       String(value)
     );
   });
-  console.log(formattedString);
   return formattedString;
 };
 

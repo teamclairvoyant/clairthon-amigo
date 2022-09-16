@@ -52,11 +52,9 @@ function ForgotPassword() {
       })
       .catch((err) => {
         toast.error(err.message);
-        console.log(err.message);
       });
   } catch (error) {
     toast.error("Error Occured Please try again later");
-    console.log("error signing in", error);
   }
   },[getValues,navigate]);
 
