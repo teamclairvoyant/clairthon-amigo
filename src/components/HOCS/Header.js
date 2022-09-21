@@ -63,6 +63,7 @@ function Header(props) {
                       firstName={user?.given_name}
                       lastName={user?.family_name}
                       bgColor="#6734ba"
+                      size={12}
                     />
                   </div>
                   <span className="mr-1 text-lg text-white leading-4 text-left font-display-bold md:ml-3">

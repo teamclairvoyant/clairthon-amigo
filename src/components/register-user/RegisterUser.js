@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { User } from "../../model/user";
 import styles from "./Register.module.scss";
 import addUser from "../../services/dmservice";
@@ -12,8 +12,14 @@ import * as yup from "yup";
 import TextBox from "../common/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import Toster from "../common/Toster";
-
 import { CANDIDATE, RECRUITER } from "../../model/Constants";
+import { useDispatch, useSelector } from "react-redux";
+import { userAction } from "../../redux/actions/userAction";
+import {
+  GET_USERS,
+  ADD_USER
+} from "../../redux/constants/user";
+import { toast } from "react-toastify";
 
 function RegisterUser() {
   const [firstName, setFirstName] = useState("");
@@ -21,11 +27,20 @@ function RegisterUser() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loggedInUsrType, setLoggedInUserType] = useState("");
+  const dispatch = useDispatch();
+  const userList = useSelector((state) => state.userList);
+  const { loading, users, error,message } = userList;
+
+  useEffect(() => {
+    dispatch(userAction(GET_USERS));
+  }, [dispatch]);
+
 
   Auth.currentUserInfo().then((userInfo) =>
     setLoggedInUserType(userInfo.attributes["custom:user_type"])
   );
-  const phoneRegExp = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/
+  const phoneRegExp =
+    /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
 
   const validationSchema = yup.object({
     firstName: yup.string().trim().required(COPY.FIRST_NAME_REQUIRED),
@@ -99,7 +114,14 @@ function RegisterUser() {
   };
 
   const onSubmit = () => {
-    //Register
+    const user={
+      firstName:getValues('firstName'),
+      lastName:getValues('lastName'),
+      email:getValues('email'),
+      phoneNumber:getValues('phoneNumber'),
+    }
+    dispatch(userAction(ADD_USER,user));
+    dispatch(userAction(GET_USERS));
   };
 
   const onError = useCallback(() => {
@@ -153,7 +175,7 @@ function RegisterUser() {
                   />
                 )}
               />
-               <FormHelperText className={styles.errorMessage}>
+              <FormHelperText className={styles.errorMessage}>
                 {errors?.firstName && errors.firstName.message}
               </FormHelperText>
             </div>
@@ -173,7 +195,7 @@ function RegisterUser() {
                   />
                 )}
               />
-               <FormHelperText className={styles.errorMessage}>
+              <FormHelperText className={styles.errorMessage}>
                 {errors?.lastName && errors.lastName.message}
               </FormHelperText>
             </div>
