@@ -37,5 +37,6 @@ export const COPY = {
   REGISTER_USER: "Register User",
   FIRST_NAME_REQUIRED:"First name required",
   LAST_NAME_REQUIRED:"Last name required",
-  PHONE_NUMBER_REQUIRED: "Phone number required"
+  PHONE_NUMBER_REQUIRED: "Phone number required",
+  SELCT_DOCS: "Select Documents",
 };

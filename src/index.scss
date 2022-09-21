@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.Toastify__toast-body 
+{
+    flex:none !important;
+}
