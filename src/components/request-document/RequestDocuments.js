@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import TreeItem from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -13,7 +13,8 @@ import RequestedDocumentList from '../requested-document-list/RequestedDocumentL
 
 function RequestDocuments() {
   const userList = useSelector((state) => state.userList);
-  console.log('docs',userList);
+  console.log('docs', userList);
+
   const {
     handleSubmit,
     control,
@@ -31,6 +32,7 @@ function RequestDocuments() {
     reValidateMode: "onBlur",
   });
   const [selectedDocuements, setSelectedDocuments] = useState([]);
+  const [rowsArray, setRowsArray] = useState([]);
 
   const onSubmit = () => {
     //Register
@@ -40,69 +42,100 @@ function RequestDocuments() {
     // setLoader(false);
   }, []);
 
-  const goToRequestDocument = useCallback(() => {}, []);
+  function createData(no, documentID, documentName) {
+    return { no, documentID, documentName };
+  }
 
-      const handleSelect = (event, nodeIds) => {
-        const updatedArr = selectedDocuements.map((val) => val)
-        if (!selectedDocuements.includes(nodeIds[0])) {
-          updatedArr.push(nodeIds[0])
-        }
-        setSelectedDocuments(updatedArr)
-      }
+  const onRemove = useCallback((event) => {
+    console.log("in onRemove +")
+    var id = event?.currentTarget?.value
+    var tempArray = rowsArray;
+    const index = tempArray.findIndex(object => {
+      return object.documentID === id;
+    });
+    console.log("BEfore Delete rowsArray: " + tempArray);
+    if (index >= 0) {
+      tempArray.splice(index, 1)
+      setRowsArray(tempArray)
+      console.log("After Delete rowsArray: " + tempArray);
+    }
 
-    return (
-      <section className="conatiner flex mt-8 mb-20 h-full">
-        <form onSubmit={handleSubmit(onSubmit, onError)} className ={`${styles.width}`} >
-          <div className={`flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}>
-            <main
-              className={`${styles.backgroundColor} mb-20 max-w-md px-12 self-center rounded mx-auto`}
+  }, [rowsArray]);
+
+
+  const handleSelect = (event, nodeIds) => {
+    const updatedArr = selectedDocuements.map((val) => val)
+    if (!selectedDocuements.includes(nodeIds[0])) {
+      updatedArr.push(nodeIds[0])
+    }
+    setSelectedDocuments(updatedArr)
+    let tempArray = [];
+    if (selectedDocuements.length > 0) {
+      var i = 0;
+      selectedDocuements.map((value) => {
+        i++;
+        tempArray.push(createData(i, value, value))
+      })
+    }
+    setRowsArray(tempArray)
+
+    console.log(rowsArray)
+  }
+  console.log("rowsArray 21212-> "+rowsArray)
+
+  return (
+    <section className="conatiner flex mt-8 mb-20 h-full">
+      <form onSubmit={handleSubmit(onSubmit, onError)} className={`${styles.width}`} >
+        <div className={`flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}>
+          <main
+            className={`${styles.backgroundColor} mb-20 max-w-md px-12 self-center rounded mx-auto`}
+          >
+            <TreeView
+              aria-label="multi-select"
+              defaultCollapseIcon={<ExpandMoreIcon />}
+              defaultExpandIcon={<ChevronRightIcon />}
+              onNodeSelect={handleSelect}
+              multiSelect
+              sx={{ height: 200, flexGrow: 1, maxWidth: 400, overflowY: 'auto', marginTop: 5 }}
             >
-              <TreeView
-                   aria-label="multi-select"
-                   defaultCollapseIcon={<ExpandMoreIcon />}
-                   defaultExpandIcon={<ChevronRightIcon />}
-                   onNodeSelect={handleSelect}
-                   multiSelect
-                   sx={{ height: 200, flexGrow: 1, maxWidth: 400, overflowY: 'auto' ,marginTop: 5 }}
+              <TreeItem nodeId="PD" label="Personal document" >
+                <TreeItem nodeId="PD_PAN-CARD" label="Pan card" ></TreeItem>
+                <TreeItem nodeId="PD_ADHAR-CARD" label="Adhar Card" ></TreeItem>
+              </TreeItem>
+              <TreeItem nodeId="ADD" label="Address">
+                <TreeItem nodeId="ADD_ADHAR-CARD" label="Adhar card" />
+                <TreeItem nodeId="ADD_VOTER-ID" label="Voter id" />
+              </TreeItem>
+              <TreeItem nodeId="ED" label="Educational Documents">
+                <TreeItem nodeId="ED_GRADUATION-CART" label="Graduation Certificate" />
+                <TreeItem nodeId="ED_DIPLOMA" label="Diploma" />
+                <TreeItem nodeId="ED_HSC" label="HSC" />
+              </TreeItem>
+              <TreeItem nodeId="EXP" label="Experiance">
+              </TreeItem>
+            </TreeView>
+            <div className="flex w-full justify-center pb-4">
+              <span className={styles.gradeButtonWrapper}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  className={styles.loginButton}
+                  onClick={handleSubmit(onSubmit, onError)}
                 >
-                    <TreeItem nodeId="PD" label="Personal document" >
-                        <TreeItem nodeId="PD_PAN-CARD" label="Pan card" ></TreeItem>
-                        <TreeItem nodeId="PD_ADHAR-CARD" label="Adhar Card" ></TreeItem>
-                    </TreeItem>
-                    <TreeItem nodeId="ADD" label="Address">
-                        <TreeItem nodeId="ADD_ADHAR-CARD" label="Adhar card" />
-                        <TreeItem nodeId="ADD_VOTER-ID" label="Voter id"/>
-                    </TreeItem>
-                    <TreeItem nodeId="ED" label="Educational Documents">
-                        <TreeItem nodeId="ED_GRADUATION-CART" label="Graduation Certificate"  />
-                        <TreeItem nodeId="ED_DIPLOMA" label="Diploma"/>
-                        <TreeItem nodeId="ED_HSC" label="HSC"/>
-                    </TreeItem>
-                    <TreeItem nodeId="EXP" label="Experiance">
-                    </TreeItem>
-                </TreeView>
-              <div className="flex w-full justify-center pb-4">
-                <span className={styles.gradeButtonWrapper}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    size="large"
-                    className={styles.loginButton}
-                    onClick={handleSubmit(onSubmit, onError)}
-                  >
-                    {COPY.SUBMIT}
-                  </Button>
-                </span>
-              </div>
-            </main>
-          </div>
-        </form>
-        <div className={` backgroundColor ${styles.width}`}>
-          {/* Selected docs list:
+                  {COPY.SUBMIT}
+                </Button>
+              </span>
+            </div>
+          </main>
+        </div>
+      </form>
+      <div className={` backgroundColor ${styles.width}`}>
+        {/* Selected docs list:
           {selectedDocuements} */}
-          <RequestedDocumentList props={selectedDocuements}></RequestedDocumentList>
-          </div>
-        </section>
-      );
+        <RequestedDocumentList rows={rowsArray} onRemoveElement={onRemove}></RequestedDocumentList>
+      </div>
+    </section>
+  );
 }
 export default withHeader(RequestDocuments);

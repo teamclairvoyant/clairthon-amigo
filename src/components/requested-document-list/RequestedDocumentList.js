@@ -9,26 +9,24 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-function RequestedDocumentList({ props }) {
-    const [rows, setRows] = useState([]);
+function RequestedDocumentList(props) {
+    console.log("props: "+ props)
+    const {
+        onRemoveElement,
+        rows,
+      } = props;
 
-    const rowsArray=[]
-    const selectedDocuements = props
+    //const [rows, setRows] = useState([]);
 
-    function createData(no, documentID, documentName) {
-        return { no, documentID, documentName };
+    function removeElementCallback(event){
+        onRemoveElement(event)
     }
 
-    useEffect(() => {
-        if (selectedDocuements.length > 0) {
-            var i = 0;
-            selectedDocuements.map((value) => {
-                i++;
-                rowsArray.push(createData(i, value, value))
-             })
-             setRows(rowsArray);
-        }
-    }, [selectedDocuements]);
+    // useEffect(()=>{
+    //     setRows(props.selectedProps)
+    // },[])
+
+    console.log("RequestedDocumentList: "+ rows)
 
     const onSubmit = () => {
         //Register
@@ -38,20 +36,6 @@ function RequestedDocumentList({ props }) {
         //notificationService.showError(COPY.VALIDATION_ENTER_ALL_FIELDS);
         // setLoader(false);
     }, []);
-
-    const removeElement = useCallback((event, value) => {
-        var id = event?.currentTarget?.value
-        const index = rowsArray.findIndex(object => {
-            return object.documentID === id;
-        });
-        console.log("BEfore Delete: "+rowsArray);
-        if(index>=0){
-            rowsArray.splice(index,1);
-            setRows(rowsArray);
-        }
-        console.log("After Delete: "+rowsArray);
-        
-    }, [selectedDocuements]);
 
 
     return (
@@ -77,7 +61,7 @@ function RequestedDocumentList({ props }) {
                             <TableCell align="left">
                                 <IconButton  aria-label="delete"
                                 size="large"
-                                onClick={removeElement}
+                                onClick={removeElementCallback}
                                 value = {row.documentID}
                                 >
                                     <DeleteIcon />
