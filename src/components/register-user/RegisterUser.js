@@ -12,7 +12,12 @@ import * as yup from "yup";
 import TextBox from "../common/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import Toster from "../common/Toster";
-import { CANDIDATE, RECRUITER } from "../../model/Constants";
+import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+
+import { CANDIDATE, RECRUITER, ADMIN } from "../../model/Constants";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../../redux/actions/userAction";
 import {
@@ -20,6 +25,7 @@ import {
   ADD_USER
 } from "../../redux/constants/user";
 import { toast } from "react-toastify";
+
 
 function RegisterUser() {
   const [firstName, setFirstName] = useState("");
@@ -36,8 +42,9 @@ function RegisterUser() {
   }, [dispatch]);
 
 
-  Auth.currentUserInfo().then((userInfo) =>
+  Auth.currentUserInfo().then((userInfo) => {
     setLoggedInUserType(userInfo.attributes["custom:user_type"])
+  }
   );
   const phoneRegExp =
     /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
@@ -131,11 +138,30 @@ function RegisterUser() {
 
   function dropDown() {
     return (
-      <div>
-        <select>
-          <option value="Recruiter">Recruiter</option>
-          <option value="Candidate">Candidate</option>
-        </select>
+      <div className="pb-5">
+        <Controller
+          control={control}
+          name={"user Type"}
+          render={({ field: { onChange, value, onBlur } }) => (
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                  User Type
+                </InputLabel>
+                <NativeSelect
+                  defaultValue={RECRUITER}
+                  inputProps={{
+                    name: 'usertype',
+                    id: 'uncontrolled-native',
+                  }}
+                >
+                  <option value={RECRUITER}>Recruiter</option>
+                  <option value={CANDIDATE}>Candidate</option>
+                </NativeSelect>
+              </FormControl>
+            </Box>
+          )}
+        />
       </div>
     );
   }
@@ -240,6 +266,9 @@ function RegisterUser() {
                 {errors?.phoneNumber && errors.phoneNumber.message}
               </FormHelperText>
             </div>
+            {
+              loggedInUsrType == ADMIN && dropDown()
+            }
             <div className="flex w-full justify-center pb-4">
               <span className={styles.gradeButtonWrapper}>
                 <Button
