@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import { COPY } from "../../constant";
 import withHeader from "../HOCS/withHeader";
 import { useDispatch, useSelector } from "react-redux";
+import RequestedDocumentList from '../requested-document-list/RequestedDocumentList'
 
 function RequestDocuments() {
   const userList = useSelector((state) => state.userList);
@@ -29,6 +30,7 @@ function RequestDocuments() {
     mode: "onBlur",
     reValidateMode: "onBlur",
   });
+  const [selectedDocuements, setSelectedDocuments] = useState([]);
 
   const onSubmit = () => {
     //Register
@@ -40,62 +42,67 @@ function RequestDocuments() {
 
   const goToRequestDocument = useCallback(() => {}, []);
 
-  return (
-    <section className="conatiner mt-8 mb-20 h-full">
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
-        <div
-          className={`flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}
-        >
-          <main
-            className={`${styles.backgroundColor} mb-20 max-w-md px-12 self-center rounded mx-auto`}
-          >
-            <h5 className="text-center font-semibold text-main mt-6">
-              {COPY.SELCT_DOCS}
-            </h5>
-            <TreeView
-              aria-label="multi-select"
-              defaultCollapseIcon={<ExpandMoreIcon />}
-              defaultExpandIcon={<ChevronRightIcon />}
-              multiSelect
-              sx={{
-                height: 200,
-                flexGrow: 1,
-                maxWidth: 400,
-                overflowY: "auto",
-                marginTop: 3,
-              }}
+      const handleSelect = (event, nodeIds) => {
+        const updatedArr = selectedDocuements.map((val) => val)
+        if (!selectedDocuements.includes(nodeIds[0])) {
+          updatedArr.push(nodeIds[0])
+        }
+        setSelectedDocuments(updatedArr)
+      }
+
+    return (
+      <section className="conatiner flex mt-8 mb-20 h-full">
+        <form onSubmit={handleSubmit(onSubmit, onError)} className ={`${styles.width}`} >
+          <div className={`flex bg-primary bg-no-repeat bg-cover ${styles.backImg}`}>
+            <main
+              className={`${styles.backgroundColor} mb-20 max-w-md px-12 self-center rounded mx-auto`}
             >
-              <TreeItem nodeId="1" label="Personal document">
-                <TreeItem nodeId="2" label="Pan card"></TreeItem>
-                <TreeItem nodeId="3" label="Pan card"></TreeItem>
-              </TreeItem>
-              <TreeItem nodeId="4" label="Address">
-                <TreeItem nodeId="5" label="Adhar card" />
-                <TreeItem nodeId="6" label="Voter id" />
-              </TreeItem>
-              <TreeItem nodeId="7" label="Educational Documents">
-                <TreeItem nodeId="8" label="Graduation Certificate" />
-                <TreeItem nodeId="9" label="Diploma" />
-                <TreeItem nodeId="10" label="HSC" />
-              </TreeItem>
-            </TreeView>
-            <div className="flex w-full justify-center pb-4">
-              <span className={styles.gradeButtonWrapper}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  className={styles.loginButton}
-                  onClick={handleSubmit(onSubmit, onError)}
+              <TreeView
+                   aria-label="multi-select"
+                   defaultCollapseIcon={<ExpandMoreIcon />}
+                   defaultExpandIcon={<ChevronRightIcon />}
+                   onNodeSelect={handleSelect}
+                   multiSelect
+                   sx={{ height: 200, flexGrow: 1, maxWidth: 400, overflowY: 'auto' ,marginTop: 5 }}
                 >
-                  {COPY.SUBMIT}
-                </Button>
-              </span>
-            </div>
-          </main>
-        </div>
-      </form>
-    </section>
-  );
+                    <TreeItem nodeId="PD" label="Personal document" >
+                        <TreeItem nodeId="PD_PAN-CARD" label="Pan card" ></TreeItem>
+                        <TreeItem nodeId="PD_ADHAR-CARD" label="Adhar Card" ></TreeItem>
+                    </TreeItem>
+                    <TreeItem nodeId="ADD" label="Address">
+                        <TreeItem nodeId="ADD_ADHAR-CARD" label="Adhar card" />
+                        <TreeItem nodeId="ADD_VOTER-ID" label="Voter id"/>
+                    </TreeItem>
+                    <TreeItem nodeId="ED" label="Educational Documents">
+                        <TreeItem nodeId="ED_GRADUATION-CART" label="Graduation Certificate"  />
+                        <TreeItem nodeId="ED_DIPLOMA" label="Diploma"/>
+                        <TreeItem nodeId="ED_HSC" label="HSC"/>
+                    </TreeItem>
+                    <TreeItem nodeId="EXP" label="Experiance">
+                    </TreeItem>
+                </TreeView>
+              <div className="flex w-full justify-center pb-4">
+                <span className={styles.gradeButtonWrapper}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    className={styles.loginButton}
+                    onClick={handleSubmit(onSubmit, onError)}
+                  >
+                    {COPY.SUBMIT}
+                  </Button>
+                </span>
+              </div>
+            </main>
+          </div>
+        </form>
+        <div className={` backgroundColor ${styles.width}`}>
+          {/* Selected docs list:
+          {selectedDocuements} */}
+          <RequestedDocumentList props={selectedDocuements}></RequestedDocumentList>
+          </div>
+        </section>
+      );
 }
 export default withHeader(RequestDocuments);

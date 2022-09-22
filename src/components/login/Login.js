@@ -40,26 +40,7 @@ function Login() {
     resolver: yupResolver(validationSchema),
   });
 
-
-  // Auth.currentUserInfo()
-  // .then((userInfo)=>{
-  //   setLoggedInUserType(userInfo?.attributes["custom:user_type"])
-  // })
-  // .catch((e) =>{
-  //     console.log(e);
-  // });
-
   let navigate = useNavigate();
-
-  const handleInputChange = useCallback((e) => {
-    const { id, value } = e.target;
-    if (id === "email") {
-      setEmail(value);
-    }
-    if (id === "password") {
-      setPassword(value);
-    }
-  }, []);
 
   const goToSetPassword = useCallback(
     (user) => {
