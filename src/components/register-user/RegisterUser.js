@@ -38,14 +38,14 @@ function RegisterUser() {
   const { loading, users, error,message } = userList;
 
   useEffect(() => {
+    Auth.currentUserInfo().then((userInfo) => {
+      setLoggedInUserType(userInfo.attributes["custom:user_type"])
+    });
     dispatch(userAction(GET_USERS));
   }, [dispatch]);
 
 
-  Auth.currentUserInfo().then((userInfo) => {
-    setLoggedInUserType(userInfo.attributes["custom:user_type"])
-  }
-  );
+
   const phoneRegExp =
     /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
 
