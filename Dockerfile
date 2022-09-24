@@ -2,7 +2,7 @@ FROM node:18 as build
 EXPOSE 80
 WORKDIR /react-app
 COPY package*.json ./
-RUN yarn install
+RUN yarn install --frozen-lockfile --network-timeout 1000000
 COPY . .
 RUN yarn run build
 FROM nginx:1.19
