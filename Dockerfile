@@ -1,7 +1,7 @@
 FROM node:15.4 as build 
 EXPOSE 80
 WORKDIR /react-app
-COPY package*.jso .
+COPY package*.json .
 RUN yarn install
 COPY . .
 RUN yarn run build
