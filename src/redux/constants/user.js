@@ -3,3 +3,10 @@ export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const GET_USERS_FAILED = "GET_USERS_FAILED";
 export const ADD_USER= "ADD_USER";
 export const ADD_USER_FAILED= "ADD_USER_FAILED";
+
+export const GET_ALL_DOCUMENTS= "GET_ALL_DOCUMENTS";
+export const GET_ALL_SUCCESS= "GET_ALL_SUCCESS";
+export const GET_ALL_FAILED= "GET_ALL_FAILED";
+
+export const GET_DOCUMENT= "GET_ALL_FAILED";
+

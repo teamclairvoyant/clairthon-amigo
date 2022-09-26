@@ -126,9 +126,25 @@ function RegisterUser() {
       lastName:getValues('lastName'),
       email:getValues('email'),
       phoneNumber:getValues('phoneNumber'),
+      userType:'Candidate'
     }
-    dispatch(userAction(ADD_USER,user));
-    dispatch(userAction(GET_USERS));
+
+    Auth.currentAuthenticatedUser()
+        .then((data) => {
+          if (loggedInUsrType === RECRUITER) {
+            user.userType = CANDIDATE;
+          }
+          //addUser(user, data.signInUserSession.idToken.jwtToken);
+          const userData = {
+            user:user,
+            token: data.signInUserSession.idToken.jwtToken
+          }
+          dispatch(userAction(ADD_USER, userData));
+          dispatch(userAction(GET_USERS));
+
+        })
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err));
   };
 
   const onError = useCallback(() => {
