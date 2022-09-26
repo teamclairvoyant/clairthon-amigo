@@ -22,6 +22,7 @@ function Document() {
       setFileName(file[0]?.name);
       setFileArray(file);
       setIsComplete(true);
+      
       toast.success("Successfully uploaded");
     } else {
       toast.error("File not supported");

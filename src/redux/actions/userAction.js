@@ -31,10 +31,15 @@ export const userAction = (type,userData) => async (dispatch) => {
     }
     case ADD_USER:
         {
+              console.log("userData:", userData);
             try {
                 const { data } = await axios.post(
-                  "https://jsonplaceholder.typicode."
-                );
+                  "https://u8evk630vj.execute-api.ap-south-1.amazonaws.com/dev/user", {user:userData.user},{
+                  headers:{
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': userData.token,
+                  }
+                });
                 console.log(data);
                 dispatch({ type: ADD_USER, payload: data });
               } catch (error) {
