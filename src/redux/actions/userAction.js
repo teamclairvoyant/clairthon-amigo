@@ -7,6 +7,7 @@ import {
   ADD_USER_FAILED
 } from "../constants/user";
 import { toast } from "react-toastify";
+
 export const userAction = (type,userData) => async (dispatch) => {
     console.log(type,userData);
   switch (type) {
@@ -41,7 +42,18 @@ export const userAction = (type,userData) => async (dispatch) => {
                   }
                 });
                 console.log(data);
-                dispatch({ type: ADD_USER, payload: data });
+                if(data.code==='UsernameExistsException'){
+                  dispatch({
+                    type: ADD_USER_FAILED,
+                    payload:
+                      data && data.message
+                  });
+                  toast.error("Account with given email already exist");
+                }else{
+                  dispatch({ type: ADD_USER, payload: data });
+                  toast.success(userData.user.userType+" Successfully registered");
+                }
+                
               } catch (error) {
                 dispatch({
                   type: ADD_USER_FAILED,
