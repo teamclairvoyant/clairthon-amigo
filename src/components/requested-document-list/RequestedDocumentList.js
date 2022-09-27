@@ -24,7 +24,6 @@ function RequestedDocumentList(props) {
                 <TableHead>
                     <TableRow>
                         <TableCell>Sr. No</TableCell>
-                        <TableCell>Document Id</TableCell>
                         <TableCell>Document Name</TableCell>
                         <TableCell>Remove</TableCell>
                     </TableRow>
@@ -36,7 +35,6 @@ function RequestedDocumentList(props) {
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell align="left">{row.no}</TableCell>
-                            <TableCell align="left">{row.documentID}</TableCell>
                             <TableCell align="left">{row.documentName}</TableCell>
                             <TableCell align="left">
                                 <IconButton  aria-label="delete"
