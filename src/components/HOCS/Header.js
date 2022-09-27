@@ -12,20 +12,30 @@ import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import User from "../Hooks/useAuth";
-
+import { Auth } from "aws-amplify";
+import { useNavigate } from "react-router-dom";
 /**
  * Header that is displayed at the top of every page that uses the Main layout
  */
 function Header(props) {
-  const { onLogout } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const user = User();
+  const navigate = useNavigate();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onLogout = async () => {
+    try {
+      await Auth.signOut();
+      navigate("/login");
+    } catch (error) {
+      console.log("error signing out: ", error);
+    }
   };
 
   return (
@@ -68,7 +78,7 @@ function Header(props) {
                   </div>
                   <span className="mr-1 text-lg text-white leading-4 text-left font-display-bold md:ml-3">
                     <span className="hidden md:inline-block">
-                    {user?.given_name} {user?.family_name}
+                      {user?.given_name} {user?.family_name}
                     </span>
                   </span>
                 </>

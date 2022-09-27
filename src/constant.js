@@ -39,4 +39,5 @@ export const COPY = {
   LAST_NAME_REQUIRED:"Last name required",
   PHONE_NUMBER_REQUIRED: "Phone number required",
   SELCT_DOCS: "Select Documents",
+  REQUIRED_FIELD:"* Required Field",
 };
