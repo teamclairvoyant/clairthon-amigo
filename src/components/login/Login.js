@@ -14,11 +14,11 @@ import Link from "@mui/material/Link";
 import Toster from "../common/Toster";
 import { toast } from "react-toastify";
 
-function Login() {
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedInUsrType, setLoggedInUserType] = useState("");
-  const [userObj, setUserObj] = useState("");
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
     email: yup.string().email(COPY.ENTER_VALID_EMAIL).trim().required(COPY.EMAIL_REQUIRED),
@@ -40,15 +40,11 @@ function Login() {
     resolver: yupResolver(validationSchema),
   });
 
-  let navigate = useNavigate();
+  const goToSetPassword = useCallback((username, password) => {
+    navigate("/set-new-password", { state: { username: username, password:password } });
+  }, [navigate]);
 
-  const goToSetPassword = useCallback(
-    (user) => {
-      setUserObj(user);
-      navigate("/set-new-password", { state: { currentUser: userObj } });
-    },
-    [navigate, userObj]
-  );
+
   const goToRegister = useCallback(() => {
     navigate("/register");
   }, [navigate]);
@@ -61,7 +57,7 @@ function Login() {
       await Auth.signIn(getValues("email"), getValues("password"))
         .then((user) => {
           if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
-            goToSetPassword(user);
+            goToSetPassword(getValues("email"), getValues("password"));
           } else if (loggedInUsrType !== CANDIDATE) {
             goToRegister();
           }
@@ -80,17 +76,8 @@ function Login() {
     goToConfirmPage,
     goToSetPassword,
     loggedInUsrType,
-    getValues,
+    getValues
   ]);
-
-  const handleSignOut = useCallback(async () => {
-    // You can pass an object which has the username, password and validationData which is sent to a PreAuthentication Lambda trigger
-    Auth.signOut()
-      .then((user) => {
-        console.log(user);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   const onError = useCallback(() => {
   }, []);
