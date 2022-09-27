@@ -1,27 +1,43 @@
+import TreeItem from "@mui/lab/TreeItem";
 
-import { USER_REGISTER_LAMBDA } from '../model/Constants'
 
-export default async function addUser(user, token) {
-    await fetch(USER_REGISTER_LAMBDA, {
-        method: 'POST',
-        body: JSON.stringify({
-            "user": {
-                "firstName": user.firstName,
-                "lastName": user.lastName,
-                "email": user.email
-            }
-        }),
-        headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': token,
-        },
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            alert("user registered successfully:" + user.email)
+export default function transformTreeData(documentList) {
+    let transformedData = [];
+    Object.entries(documentList)?.map(object => {
+
+        let category = object[0];
+        let tempChildren = object[1];
+        let children = [];
+        tempChildren.map(value => {
+            children.push({
+                id: value,
+                name: value,
+            })
         })
-        .catch((err) => {
-            console.log(err.message);
-        });
+        transformedData.push({
+            id: "disabled" + category,
+            children: children,
+            name: category
+        })
+
+
+    });
+    console.log("getTreeItemsFromData", transformedData)
+    var nodes = {
+        id: "disabled-Documents",
+        name: "Documents",
+        children: transformedData,
+    }
+
+    return renderTree(nodes);
 };
+
+const renderTree = (nodes) => (
+    <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
+        {Array.isArray(nodes.children)
+            ? nodes.children.map((node) => renderTree(node))
+            : null}
+    </TreeItem>
+);
+
 
