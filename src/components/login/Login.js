@@ -21,7 +21,11 @@ function Login(props) {
   const navigate = useNavigate();
 
   const validationSchema = yup.object({
-    email: yup.string().email(COPY.ENTER_VALID_EMAIL).trim().required(COPY.EMAIL_REQUIRED),
+    email: yup
+      .string()
+      .email(COPY.ENTER_VALID_EMAIL)
+      .trim()
+      .required(COPY.EMAIL_REQUIRED),
     password: yup.string().trim().required(COPY.PASSWORD_REQUIRED),
   });
 
@@ -40,10 +44,14 @@ function Login(props) {
     resolver: yupResolver(validationSchema),
   });
 
-  const goToSetPassword = useCallback((username, password) => {
-    navigate("/set-new-password", { state: { username: username, password:password } });
-  }, [navigate]);
-
+  const goToSetPassword = useCallback(
+    (username, password) => {
+      navigate("/set-new-password", {
+        state: { username: username, password: password },
+      });
+    },
+    [navigate]
+  );
 
   const goToRegister = useCallback(() => {
     navigate("/register");
@@ -56,6 +64,7 @@ function Login(props) {
     try {
       await Auth.signIn(getValues("email"), getValues("password"))
         .then((user) => {
+          localStorage.setItem("user", JSON.stringify(user?.attributes));
           if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
             goToSetPassword(getValues("email"), getValues("password"));
           } else if (loggedInUsrType !== CANDIDATE) {
@@ -71,16 +80,9 @@ function Login(props) {
         goToConfirmPage();
       }
     }
-  }, [
-    goToRegister,
-    goToConfirmPage,
-    goToSetPassword,
-    loggedInUsrType,
-    getValues
-  ]);
+  }, [goToRegister, goToConfirmPage, loggedInUsrType, getValues,goToSetPassword]);
 
-  const onError = useCallback(() => {
-  }, []);
+  const onError = useCallback(() => {}, []);
 
   const onSubmit = () => {
     setEmail(getValues("email"));
@@ -139,7 +141,7 @@ function Login(props) {
                   id="password"
                   name="password"
                   label="Password"
-                  type='password'
+                  type="password"
                   value={value}
                   onChange={onChange}
                   onBlur={onBlur}
@@ -171,11 +173,10 @@ function Login(props) {
               {COPY.FORGOT_PASSWORD}
             </Link>
           </div>
-          <div>
-          </div>
+          <div></div>
         </main>
       </div>
-      <Toster/>
+      <Toster />
     </form>
   );
 }
