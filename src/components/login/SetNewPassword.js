@@ -67,10 +67,10 @@ function SetNewPassword(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Set New Password</DialogTitle>
+        <DialogTitle id="alert-dialog-title" className="text-md">Set New Password</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <label className="text-main text-black mr-4">
+            <label className="text-main text-black mr-4 font-normal">
               Enter new password
             </label>
             <input
