@@ -17,14 +17,11 @@ function DocumentCard(props) {
     isComplete = false,
     handleFileSelection,
   } = props;
-  const dummy = useRef(null);
 
-  useEffect(() => {
-    dummy?.current?.scrollIntoView({ behavior: "smooth" });
-  }, [text]);
+
 
   return (
-    <div
+    <div 
       className={`my-1 px-1 w-full sm:w-1/5 md:w-1/5 md:my-4 md:px-4 lg:w-1/4 flex xs:px-4 ${styles.parentDiv}`}
     >
       <article className="w-full sm:w-auto md:w-full overflow-hidden rounded-lg shadow-lg bg-white rounded-t rounded-b sm:flex sm:flex-col sm:justify-between">

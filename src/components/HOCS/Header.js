@@ -31,6 +31,7 @@ function Header(props) {
 
   const onLogout = async () => {
     try {
+      localStorage.clear();
       await Auth.signOut();
       navigate("/login");
     } catch (error) {
@@ -122,10 +123,6 @@ function Header(props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem>
-          <Avatar /> {COPY.PROFILE}
-        </MenuItem>
-        <Divider />
         <MenuItem onClick={onLogout}>{COPY.LOGOUT}</MenuItem>
       </Menu>
     </div>
