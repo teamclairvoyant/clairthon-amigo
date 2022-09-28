@@ -146,10 +146,11 @@ function RequestDocuments() {
 
   return (
     <section className="conatiner mt-8 mb-20 h-full">
-      <div className={`${styles.width100}`}>
+      <div className={`${styles.width100} flex justify-center`}>
         <Card sx={{ minWidth: 275 }}>
           <CardContent>
-            <PersonIcon></PersonIcon> {selectedCandidateName} <EmailIcon></EmailIcon> {selectedCandidateEmail}
+            <div className="pr-32 break-words"><PersonIcon></PersonIcon> {selectedCandidateName}</div>
+            <div  className="pr-24 pt-4 break-words"><EmailIcon></EmailIcon> {selectedCandidateEmail}</div>
           </CardContent>
         </Card>
       </div>
