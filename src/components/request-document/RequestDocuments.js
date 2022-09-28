@@ -15,8 +15,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
+import transformTreeData from '../../services/dmservice';
+
 import {
   GET_ALL_DOCUMENTS,
+  ADD_REQUESTED_DOCUMENT
 } from "../../redux/constants/user";
 
 function RequestDocuments() {
@@ -27,10 +30,6 @@ function RequestDocuments() {
   const documentListMemo = useMemo(() => {
     return userList.documents
   }, [userList]);
-  
-
-  console.log("isLoading", userList)
-  console.log("documentList", documentList)
 
   const selectedCandidateName = "fname lname"
   const selectedCandidateEmail = "email@gmail.com"
@@ -60,8 +59,22 @@ function RequestDocuments() {
   }, [dispatch]);
 
   const onSubmit = () => {
-    //Register
+    let docs = undefined;
+    selectedDocuements.map(value=>{
+      docs={
+        ...docs,
+        [value]:false
+      }
+    })
+    
+    let data={
+      candidateId: "dummy_1234",  //need to take from /register page, forwarded when candidate selected from list
+      recruiterId: "dummy_3456",  //needs to take recruiterId from token/ localstorage user object
+      documents:docs
+    }
+    dispatch(documentAction(ADD_REQUESTED_DOCUMENT, data));
   };
+
   const onError = useCallback(() => {
     //notificationService.showError(COPY.VALIDATION_ENTER_ALL_FIELDS);
     // setLoader(false);
@@ -118,25 +131,19 @@ function RequestDocuments() {
   }, [selectedDocuements, rowsArray])
 
 
-  const getTreeItemsFromData = useMemo((documentList) => {
-    console.log("getTreeItemsFromData: ", documentList)
-    return documentList?.map(treeItemData => {
-      let children = undefined;
-      if (treeItemData.children && treeItemData.children.length > 0) {
-        children = getTreeItemsFromData(treeItemData.children);
-      }
-      return (
-        <TreeItem
-          key={treeItemData.id}
-          nodeId={treeItemData.id}
-          label={treeItemData.name}
-          children={children}
-        />
-      );
-    });
+  const getTreeItemsFromData = useCallback((documentList) => {
+    return transformTreeData(documentList);
+    
   },[documentList]);
 
-  console.log("documebnt list: ", documentListMemo);
+  const renderTree = (nodes) => (
+    <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
+      {Array.isArray(nodes.children)
+        ? nodes.children.map((node) => renderTree(node))
+        : null}
+    </TreeItem>
+  );
+
   return (
     <section className="conatiner mt-8 mb-20 h-full">
       <div className={`${styles.width100}`}>
@@ -161,32 +168,8 @@ function RequestDocuments() {
                 sx={{ height: 200, flexGrow: 1, maxWidth: 400, overflowY: 'auto', marginTop: 5 }}
               >
 
-              {isLoading && getTreeItemsFromData(documentListMemo)}
+              {!isLoading && getTreeItemsFromData(documentListMemo)}
 
-
-                {/* { {userList.loading && userList.documents.map(employee => {
-                  return (
-                    <TreeItem nodeId={employee.documentId} label="Personal document">
-                      <TreeItem nodeId="PD_PAN-CARD" label="Pan card" ></TreeItem>
-                      <TreeItem nodeId="PD_ADHAR-CARD" label="Adhar Card" ></TreeItem>
-                    </TreeItem>
-                  );
-                })} } */}
-                {/* <TreeItem nodeId="disabled-PD" label="Personal document">
-                  <TreeItem nodeId="PD_PAN-CARD" label="Pan card" ></TreeItem>
-                  <TreeItem nodeId="PD_ADHAR-CARD" label="Adhar Card" ></TreeItem>
-                </TreeItem>
-                <TreeItem nodeId="disabled-ADD" label="Address">
-                  <TreeItem nodeId="ADD_ADHAR-CARD" label="Adhar card" />
-                  <TreeItem nodeId="ADD_VOTER-ID" label="Voter id" />
-                </TreeItem>
-                <TreeItem nodeId="disabled-ED" label="Educational Documents">
-                  <TreeItem nodeId="ED_GRADUATION-CART" label="Graduation Certificate" />
-                  <TreeItem nodeId="ED_DIPLOMA" label="Diploma" />
-                  <TreeItem nodeId="ED_HSC" label="HSC" />
-                </TreeItem>
-                <TreeItem nodeId="disabled-EXP" label="Experiance">
-                </TreeItem>  */}
               </TreeView>
               <div className="flex w-full justify-center pb-4">
                 <span className={styles.gradeButtonWrapper}>
