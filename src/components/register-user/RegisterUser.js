@@ -25,6 +25,7 @@ import {
   ADD_USER
 } from "../../redux/constants/user";
 import { toast } from "react-toastify";
+import BasicTable from "../common/RegisterTable";
 
 
 function RegisterUser() {
@@ -161,6 +162,7 @@ function RegisterUser() {
   }
 
   return (
+    <>
     <section className="conatiner mt-8 mb-20 h-full">
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div
@@ -281,6 +283,8 @@ function RegisterUser() {
         <Toster />
       </form>
     </section>
+    <BasicTable />
+   </> 
   );
 }
 export default withHeader(RegisterUser);
