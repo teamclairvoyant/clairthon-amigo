@@ -7,6 +7,7 @@ import {
   ADD_USER_FAILED
 } from "../constants/user";
 import { toast } from "react-toastify";
+
 export const userAction = (type,userData) => async (dispatch) => {
     console.log(type,userData);
   switch (type) {
@@ -31,12 +32,28 @@ export const userAction = (type,userData) => async (dispatch) => {
     }
     case ADD_USER:
         {
+              console.log("userData:", userData);
             try {
                 const { data } = await axios.post(
-                  "https://jsonplaceholder.typicode."
-                );
+                  "https://u8evk630vj.execute-api.ap-south-1.amazonaws.com/dev/user", {user:userData.user},{
+                  headers:{
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': userData.token,
+                  }
+                });
                 console.log(data);
-                dispatch({ type: ADD_USER, payload: data });
+                if(data.code==='UsernameExistsException'){
+                  dispatch({
+                    type: ADD_USER_FAILED,
+                    payload:
+                      data && data.message
+                  });
+                  toast.error("Account with given email already exist");
+                }else{
+                  dispatch({ type: ADD_USER, payload: data });
+                  toast.success(userData.user.userType+" Successfully registered");
+                }
+                
               } catch (error) {
                 dispatch({
                   type: ADD_USER_FAILED,

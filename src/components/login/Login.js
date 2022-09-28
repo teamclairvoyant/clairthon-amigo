@@ -14,14 +14,18 @@ import Link from "@mui/material/Link";
 import Toster from "../common/Toster";
 import { toast } from "react-toastify";
 
-function Login() {
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedInUsrType, setLoggedInUserType] = useState("");
-  const [userObj, setUserObj] = useState("");
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
-    email: yup.string().email(COPY.ENTER_VALID_EMAIL).trim().required(COPY.EMAIL_REQUIRED),
+    email: yup
+      .string()
+      .email(COPY.ENTER_VALID_EMAIL)
+      .trim()
+      .required(COPY.EMAIL_REQUIRED),
     password: yup.string().trim().required(COPY.PASSWORD_REQUIRED),
   });
 
@@ -40,15 +44,15 @@ function Login() {
     resolver: yupResolver(validationSchema),
   });
 
-  let navigate = useNavigate();
-
   const goToSetPassword = useCallback(
-    (user) => {
-      setUserObj(user);
-      navigate("/set-new-password", { state: { currentUser: userObj } });
+    (username, password) => {
+      navigate("/set-new-password", {
+        state: { username: username, password: password },
+      });
     },
-    [navigate, userObj]
+    [navigate]
   );
+
   const goToRegister = useCallback(() => {
     navigate("/register");
   }, [navigate]);
@@ -60,8 +64,9 @@ function Login() {
     try {
       await Auth.signIn(getValues("email"), getValues("password"))
         .then((user) => {
+          localStorage.setItem("user", JSON.stringify(user?.attributes));
           if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
-            goToSetPassword(user);
+            goToSetPassword(getValues("email"), getValues("password"));
           } else if (loggedInUsrType !== CANDIDATE) {
             goToRegister();
           }
@@ -75,25 +80,9 @@ function Login() {
         goToConfirmPage();
       }
     }
-  }, [
-    goToRegister,
-    goToConfirmPage,
-    goToSetPassword,
-    loggedInUsrType,
-    getValues,
-  ]);
+  }, [goToRegister, goToConfirmPage, loggedInUsrType, getValues,goToSetPassword]);
 
-  const handleSignOut = useCallback(async () => {
-    // You can pass an object which has the username, password and validationData which is sent to a PreAuthentication Lambda trigger
-    Auth.signOut()
-      .then((user) => {
-        console.log(user);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const onError = useCallback(() => {
-  }, []);
+  const onError = useCallback(() => {}, []);
 
   const onSubmit = () => {
     setEmail(getValues("email"));
@@ -152,7 +141,7 @@ function Login() {
                   id="password"
                   name="password"
                   label="Password"
-                  type='password'
+                  type="password"
                   value={value}
                   onChange={onChange}
                   onBlur={onBlur}
@@ -184,11 +173,10 @@ function Login() {
               {COPY.FORGOT_PASSWORD}
             </Link>
           </div>
-          <div>
-          </div>
+          <div></div>
         </main>
       </div>
-      <Toster/>
+      <Toster />
     </form>
   );
 }

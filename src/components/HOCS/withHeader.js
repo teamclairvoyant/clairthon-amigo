@@ -5,13 +5,10 @@ import Footer from '../HOCS/Footer'
  * HOC for wrapping a component with the header
  */
 function withHeader(WrappedComponent) {
-  const onLogout = () => {
-  };
-
   function withHeaderHOC() {
     return (
       <>
-        <Header onLogout={onLogout} />
+        <Header />
         <WrappedComponent />
         <Footer/>
       </>

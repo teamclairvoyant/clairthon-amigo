@@ -10,41 +10,20 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 function RequestedDocumentList(props) {
-    console.log("props: "+ props)
     const {
         onRemoveElement,
-        rows,
-      } = props;
-
-    //const [rows, setRows] = useState([]);
+        rows
+    } = props;
 
     function removeElementCallback(event){
         onRemoveElement(event)
     }
-
-    // useEffect(()=>{
-    //     setRows(props.selectedProps)
-    // },[])
-
-    console.log("RequestedDocumentList: "+ rows)
-
-    const onSubmit = () => {
-        //Register
-    };
-
-    const onError = useCallback(() => {
-        //notificationService.showError(COPY.VALIDATION_ENTER_ALL_FIELDS);
-        // setLoader(false);
-    }, []);
-
-
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell>Sr. No</TableCell>
-                        <TableCell>Document Id</TableCell>
                         <TableCell>Document Name</TableCell>
                         <TableCell>Remove</TableCell>
                     </TableRow>
@@ -56,7 +35,6 @@ function RequestedDocumentList(props) {
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell align="left">{row.no}</TableCell>
-                            <TableCell align="left">{row.documentID}</TableCell>
                             <TableCell align="left">{row.documentName}</TableCell>
                             <TableCell align="left">
                                 <IconButton  aria-label="delete"
