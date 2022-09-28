@@ -1,5 +1,6 @@
 export const COPY = {
   ADHAR: "Adhar card",
+  DOWNLOAD_ALL: "Download All",
   PAN: "Pan card",
   SSC_MARKSHEET: "SSC marksheet",
   HSC_MARKSHEET: "HSC marksheet",

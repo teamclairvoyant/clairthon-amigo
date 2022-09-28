@@ -83,7 +83,7 @@ function FileUploader(props) {
 
   return (
     <>
-        <div className="text-white mx-auto hover:bg-secondary py-2 md:my-4 px-4 sm:mb-0">
+        <div className="text-white mx-auto hover:bg-secondary py-2 md:my-4 px-4 sm:mb-0 w-72">
           <input
             aria-hidden="true"
             type="file"

@@ -9,7 +9,6 @@ import {
 import { toast } from "react-toastify";
 
 export const userAction = (type,userData) => async (dispatch) => {
-    console.log(type,userData);
   switch (type) {
     case GET_USERS:
         {
@@ -32,7 +31,6 @@ export const userAction = (type,userData) => async (dispatch) => {
     }
     case ADD_USER:
         {
-              console.log("userData:", userData);
             try {
                 const { data } = await axios.post(
                   "https://u8evk630vj.execute-api.ap-south-1.amazonaws.com/dev/user", {user:userData.user},{
@@ -41,7 +39,6 @@ export const userAction = (type,userData) => async (dispatch) => {
                     'Authorization': userData.token,
                   }
                 });
-                console.log(data);
                 if(data.code==='UsernameExistsException'){
                   dispatch({
                     type: ADD_USER_FAILED,
