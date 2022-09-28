@@ -1,11 +1,10 @@
 .BgColor{
   background-color: ghostwhite;
-  height: 100vh;
+  min-height: 100vh;
 }
 .cardDivWidth {
     @media (max-width: 400px) {
       flex-wrap: wrap;
     }
   }
-
  
