@@ -68,11 +68,11 @@ function RequestDocuments() {
     })
     
     let data={
-      candidateId: "dummy_1234",
-      recruiterId: "dummy_3456",
+      candidateId: "dummy_1234",  //need to take from /register page, forwarded when candidate selected from list
+      recruiterId: "dummy_3456",  //needs to take recruiterId from token/ localstorage user object
       documents:docs
     }
-    dispatch(documentAction(ADD_REQUESTED_DOCUMENT, selectedDocuements));
+    dispatch(documentAction(ADD_REQUESTED_DOCUMENT, data));
   };
 
   const onError = useCallback(() => {

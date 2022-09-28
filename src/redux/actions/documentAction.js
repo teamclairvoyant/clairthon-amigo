@@ -7,6 +7,7 @@ import {
   ADD_REQUESTED_DOCUMENT_SUCCESS,
   ADD_REQUESTED_DOCUMENT_FAILED
 } from "../constants/user";
+import {DM_BACKEND_SERVICE_URL} from "../../model/Constants"
 export const documentAction = (type, userData) => async (dispatch) => {
   switch (type) {
     case GET_ALL_DOCUMENTS:
@@ -14,7 +15,7 @@ export const documentAction = (type, userData) => async (dispatch) => {
         try {
           dispatch({ type: GET_ALL_DOCUMENTS });
           const { data } = await axios.get(
-            "http://document-manager-backend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com/api/document"
+            DM_BACKEND_SERVICE_URL+ "/api/document"
           );
           dispatch({ type: GET_ALL_SUCCESS, payload: data });
         } catch (error) {
@@ -33,8 +34,8 @@ export const documentAction = (type, userData) => async (dispatch) => {
       {
         try {
           dispatch({ type: ADD_REQUESTED_DOCUMENT });
-          const { data } = await axios.get(
-            "http://document-manager-backend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com/api/document", userData
+          const { data } = await axios.post(
+            DM_BACKEND_SERVICE_URL+"/api/submit", userData
           );
           dispatch({ type: ADD_REQUESTED_DOCUMENT_SUCCESS, payload: data });
         } catch (error) {
