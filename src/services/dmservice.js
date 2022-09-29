@@ -22,10 +22,8 @@ export default function transformTreeData(documentList) {
             children: children,
             name: category
         })
-
-
     });
-    console.log("getTreeItemsFromData", transformedData)
+
     var nodes = {
         id: "disabled-Documents",
         name: "Documents",

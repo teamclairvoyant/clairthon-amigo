@@ -65,15 +65,6 @@ function ConfirmUser() {
     }
   }
 
-  async function handleSignOut() {    // You can pass an object which has the username, password and validationData which is sent to a PreAuthentication Lambda trigger
-    Auth.signOut()
-      .then(user => {
-        console.log(user);
-      })
-      .catch(err => console.log(err));
-  };
-
-
   return (
     <div>
       <Dialog

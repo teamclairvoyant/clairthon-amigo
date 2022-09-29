@@ -120,7 +120,6 @@ function RegisterUser() {
           toast.success("Successfully added "+ user.email);
           dispatch(userAction(GET_USERS, recruiterData));
         })
-        .then((data) => console.log(data))
         .catch((err) => console.log(err));
   };
 
