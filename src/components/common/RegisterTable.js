@@ -22,7 +22,7 @@ function createData(id,fname, lname, email, contact, status) {
   return { id, fname, lname, email, contact, status };
 }
 
-const rows = [
+const rowsData = [
   createData(
     "1",
     "Rushikesh",
@@ -68,13 +68,23 @@ export default function BasicTable() {
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
 
+  const [rows, setRows] = useState(rowsData);
+
   useEffect(() => {
     dummy?.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const handleChange = (event) => {
-    //setStatus(event.target.value);
-  };
+  const handleChange = useCallback((event, id) => {
+    const tempArray = rows;
+    const index = tempArray.findIndex((object) =>{
+      return object.id == id;
+    })
+
+    if (index >= 0) {
+      tempArray[index].status = event.target.value;
+      setRows([...tempArray])
+    }
+  },[rows]);
 
   const requestDocument = useCallback(
     (event) => {
@@ -87,6 +97,8 @@ export default function BasicTable() {
     },
     [navigate]
   );
+
+  console.log("updatedRows:", rows)
 
   return (
     <Container className={classes.root} ref={dummy}>
@@ -105,7 +117,7 @@ export default function BasicTable() {
                 Contact
               </TableCell>
               <TableCell className={classes.tableHead} align="center">
-                Status
+              Status
               </TableCell>
               <TableCell className={classes.tableHead} align="center">
               </TableCell>
@@ -134,26 +146,26 @@ export default function BasicTable() {
                   {row.contact}
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="demo-select-small"></InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id={row.id}
+                      value={row.status}
+                      label="Document Status"
+                      onChange={(e)=>handleChange(e, row.id)}
+                    >
+                      <MenuItem name={row.id} value="new">New</MenuItem>
+                      <MenuItem name={row.id} value="complete">Complete</MenuItem>
+                      <MenuItem name={row.id} value="pending">Pending</MenuItem>
+                    </Select>
+                  </FormControl>
+                </TableCell>
+                <TableCell className={classes.tableCell} align="center">
                   <Button variant="contained" endIcon={<SendIcon />} 
                         onClick={requestDocument} id={row.id}>
                     Request document
                   </Button>
-                </TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                    <InputLabel id="demo-select-small">Status</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id={row.fname}
-                      value={status}
-                      label="Document Status"
-                      onChange={handleChange}
-                    >
-                      <MenuItem value="new">New</MenuItem>
-                      <MenuItem value="complete">Complete</MenuItem>
-                      <MenuItem value="pending">Pending</MenuItem>
-                    </Select>
-                  </FormControl>
                 </TableCell>
               </TableRow>
             ))}

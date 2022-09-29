@@ -46,8 +46,6 @@ function RegisterUser() {
     dispatch(userAction(GET_USERS));
   }, [dispatch]);
 
-
-
   const phoneRegExp =
     /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
 
