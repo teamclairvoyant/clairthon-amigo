@@ -155,8 +155,8 @@ function RequestDocuments() {
       <div className={`${styles.width100} flex justify-center`}>
         <Card sx={{ minWidth: 275 }}>
           <CardContent>
-            <div className="pr-32 break-words"><PersonIcon></PersonIcon> {selectedCandidateName}</div>
-            <div  className="pr-24 pt-4 break-words"><EmailIcon></EmailIcon> {selectedCandidateEmail}</div>
+            <div className="pr-32 break-words flex"><PersonIcon></PersonIcon> {selectedCandidateName}</div>
+            <div  className="pr-24 pt-4 break-words flex"><EmailIcon></EmailIcon> {selectedCandidateEmail}</div>
           </CardContent>
         </Card>
       </div>
