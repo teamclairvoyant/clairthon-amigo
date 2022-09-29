@@ -16,7 +16,7 @@ import NativeSelect from '@mui/material/NativeSelect';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-
+import UserData from "../Hooks/useAuth";
 import { CANDIDATE, RECRUITER, ADMIN } from "../../model/Constants";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../../redux/actions/userAction";
@@ -37,6 +37,7 @@ function RegisterUser() {
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
   const { loading, users, error,message } = userList;
+  const userData = UserData();
 
   useEffect(() => {
     Auth.currentUserInfo().then((userInfo) => {
@@ -106,7 +107,8 @@ function RegisterUser() {
       lastName:getValues('lastName'),
       email:getValues('email'),
       phoneNumber:getValues('phoneNumber'),
-      userType:'Candidate'
+      userType:'Candidate',
+      recruiterId: userData?.sub ?? '',
     }
 
     Auth.currentAuthenticatedUser()
