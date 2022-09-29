@@ -16,6 +16,7 @@ import {
   VIEW_FILE,
   DOWNLOAD_ALL,
 } from "../../redux/constants/user";
+import { useLocation } from "react-router-dom";
 import { CandidatedocumentAction } from "../../redux/actions/candidateDocumentAction";
 import Spineer from "../../components/spineer/spineer";
 
@@ -28,14 +29,30 @@ function Document() {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.documentList.error);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const candidate = location.state?.candidate ?? null;
+
+  const docListsFilter = useMemo(() => {
+    return Object.keys(docLists).filter(
+      (item) => JSON.parse(docLists[item]) === true
+    );
+  }, [docLists]);
 
   const userType = useMemo(() => {
     return user?.["custom:user_type"];
   }, [user]);
 
   const getDocuments = useCallback(() => {
-    dispatch(CandidatedocumentAction(GET_REQUESTED_DOCUMENT, user));
-  }, [dispatch]);
+    if (userType === "Recruiter") {
+      const userData = {
+        sub: candidate?.candidateId ?? "",
+      };
+      dispatch(CandidatedocumentAction(GET_REQUESTED_DOCUMENT, userData));
+    } else {
+      dispatch(CandidatedocumentAction(GET_REQUESTED_DOCUMENT, user));
+    }
+  }, [dispatch, candidate?.candidateId, user, userType]);
 
   const calculateProgress = useMemo(() => {
     const length = Object.keys(docLists).length;
@@ -51,7 +68,7 @@ function Document() {
 
   useEffect(() => {
     getDocuments();
-  }, [getDocuments]);
+  }, []);
 
   const uploadFile = useCallback(
     async (file, name) => {
@@ -75,17 +92,29 @@ function Document() {
 
   const onViewFile = useCallback(
     async (e, fileName) => {
-      await dispatch(
-        CandidatedocumentAction(VIEW_FILE, fileName, user?.sub ?? "")
-      );
-      // await getDocuments();
+      if (userType === "Recruiter") {
+        const userData = {
+          sub: candidate?.candidateId ?? "",
+        };
+        await dispatch(
+          CandidatedocumentAction(VIEW_FILE, fileName, userData?.sub ?? "")
+        );
+      } else {
+      await dispatch(CandidatedocumentAction(VIEW_FILE, fileName, user?.sub ?? ""));
+      }
     },
-    [dispatch]
+    [candidate?.candidateId, dispatch, user?.sub, userType]
   );
   const downloadAll = useCallback(async () => {
-    await dispatch(CandidatedocumentAction(DOWNLOAD_ALL, user?.sub ?? ""));
-    await getDocuments();
-  }, [dispatch, getDocuments, user?.sub]);
+    if (userType === "Recruiter") {
+      const userData = {
+        sub: candidate?.candidateId ?? "",
+      };
+      dispatch(CandidatedocumentAction(DOWNLOAD_ALL, userData?.sub));
+    } else {
+      await dispatch(CandidatedocumentAction(DOWNLOAD_ALL, user?.sub ?? ""));
+    }
+  }, [dispatch, user?.sub, candidate?.candidateId, userType]);
 
   if (loading) {
     return (
@@ -115,7 +144,7 @@ function Document() {
         </div>
         <div className="flex justify-end">
           <>
-            {docLists !== null && (
+            {docLists !== null && docListsFilter?.length > 0 && (
               <Button
                 variant="contained"
                 className="text-center"
