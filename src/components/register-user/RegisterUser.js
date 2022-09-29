@@ -30,10 +30,7 @@ import BasicTable from "../common/RegisterTable";
 
 
 function RegisterUser() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [userType, setUserType] = useState("Recruiter");
   const [loggedInUsrType, setLoggedInUserType] = useState("");
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
@@ -41,16 +38,15 @@ function RegisterUser() {
   const userData = UserData();
   const navigate = useNavigate();
 
-
   const recruiterData = {
     recruiterId: userData?.sub ?? ''
   }
   useEffect(() => {
     Auth.currentUserInfo().then((userInfo) => {
       if(userInfo?.attributes["custom:user_type"] == "Candidate"){
-        setLoggedInUserType(userInfo.attributes["custom:user_type"])
         navigate("/document")
       }
+      setLoggedInUserType(userInfo.attributes["custom:user_type"])
     });
     
     dispatch(userAction(GET_USERS, recruiterData));
@@ -78,17 +74,9 @@ function RegisterUser() {
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    if (id === "firstName") {
-      setFirstName(value);
-    }
-    if (id === "lastName") {
-      setLastName(value);
-    }
-    if (id === "email") {
-      setEmail(value);
-    }
-    if (id === "phoneNumber") {
-      setPhoneNumber(value);
+
+    if (id === "userType") {
+      setUserType(value);
     }
   };
 
@@ -115,7 +103,7 @@ function RegisterUser() {
       lastName:getValues('lastName'),
       email:getValues('email'),
       phoneNumber:"+"+getValues('phoneNumber'),
-      userType:'Candidate',
+      userType: userType,
       recruiterId: userData?.sub ?? '',
     }
 
@@ -146,7 +134,7 @@ function RegisterUser() {
       <div className="pb-5">
         <Controller
           control={control}
-          name={"user Type"}
+          name={"userType"}
           render={({ field: { onChange, value, onBlur } }) => (
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
@@ -157,8 +145,9 @@ function RegisterUser() {
                   defaultValue={RECRUITER}
                   inputProps={{
                     name: 'userType',
-                    id: 'uncontrolled-native',
+                    id: 'userType',
                   }}
+                  onChange={handleInputChange}
                 >
                   <option value={CANDIDATE}>Candidate</option>
                   <option value={RECRUITER}>Recruiter</option>

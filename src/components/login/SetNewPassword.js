@@ -9,6 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { COPY } from "../../constant";
 import styles from "../login/Login.module.scss";
+import {RECRUITER} from '../../model/Constants'
 
 function SetNewPassword(props) {
   const [password, setPassword] = useState("");
@@ -30,10 +31,6 @@ function SetNewPassword(props) {
     }
   },[]);
 
-  const goToDocumentPage = useCallback(() => {
-    navigate("/document");
-  },[navigate]);
-
   const handleClose = () => {
     setOpen(false);
     navigate("/login");
@@ -48,8 +45,12 @@ function SetNewPassword(props) {
         Auth.signIn(username, oldPassword).then((user) => {
           Auth.completeNewPassword(user, password)
             .then((user) => {
-              localStorage.setItem("user", JSON.stringify(user?.attributes));
-              goToDocumentPage();
+              localStorage.setItem("user", JSON.stringify(user?.challengeParam?.userAttributes));
+              if(user?.challengeParam?.userAttributes?.["custom:user_type"] == RECRUITER){
+                navigate("/register");
+              }else{
+                navigate("/document");
+              }
             })
             .catch((e) => {
               console.log(e);
@@ -59,7 +60,7 @@ function SetNewPassword(props) {
     } catch (error) {
       console.log("error occured for log out", error);
     }
-  }, [goToDocumentPage, oldPassword, password, username]);
+  }, [oldPassword, password, username]);
 
   return (
     <div>

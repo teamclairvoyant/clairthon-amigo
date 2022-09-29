@@ -12,6 +12,10 @@ import {
   DOWNLOAD_ALL,
   DOWNLOAD_ALL_SUCCESS,
   DOWNLOAD_ALL_FILED,
+  UPDATE_STATUS_FOR_CANDIDATE,
+  UPDATE_STATUS_FOR_CANDIDATE_FAILED,
+  UPDATE_STATUS_FOR_CANDIDATE_SUCCESS
+
 } from "../constants/user";
 import { toast } from "react-toastify";
 import { DM_BACKEND_SERVICE_URL } from "../../model/Constants";
@@ -81,7 +85,6 @@ export const CandidatedocumentAction =
 
       case DOWNLOAD_ALL:
         try {
-          dispatch({ type: DOWNLOAD_ALL });
           const { data } = await axios.get(
             `${DM_BACKEND_SERVICE_URL}/api/downloadAll/${userData}`
           );
@@ -93,6 +96,27 @@ export const CandidatedocumentAction =
         } catch (error) {
           dispatch({
             type: DOWNLOAD_ALL_FILED,
+            payload:
+              error.data && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+          });
+          toast.error("Download failed.Please try again later.");
+        }
+        break;
+
+        case UPDATE_STATUS_FOR_CANDIDATE:
+        try {
+
+          //var candidateId= userData;
+          const { data } = await axios.get(
+            `${DM_BACKEND_SERVICE_URL}/api/updateStatus/${userData}/${userData}`
+          );
+
+          dispatch({ type: UPDATE_STATUS_FOR_CANDIDATE_SUCCESS, message: "success" });
+        } catch (error) {
+          dispatch({
+            type: UPDATE_STATUS_FOR_CANDIDATE_FAILED,
             payload:
               error.data && error.response.data.message
                 ? error.response.data.message
