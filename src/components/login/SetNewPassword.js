@@ -13,10 +13,11 @@ import styles from "../login/Login.module.scss";
 function SetNewPassword(props) {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [open, setOpen] = React.useState(true);
+  
 
   const oldPassword = location.state?.password ?? null;
   const username = location.state?.username ?? null;
@@ -47,6 +48,7 @@ function SetNewPassword(props) {
         Auth.signIn(username, oldPassword).then((user) => {
           Auth.completeNewPassword(user, password)
             .then((user) => {
+              localStorage.setItem("user", JSON.stringify(user?.attributes));
               goToDocumentPage();
             })
             .catch((e) => {

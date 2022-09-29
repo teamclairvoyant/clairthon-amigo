@@ -90,7 +90,7 @@ function Login(props) {
     handleSignIn();
   };
   const goToForgotPassword = useCallback(() => {
-    navigate("/ForgotPassword", { state: { username: email } });
+    navigate("/forgot-password", { state: { username: email } });
   }, [email, navigate]);
 
   return (

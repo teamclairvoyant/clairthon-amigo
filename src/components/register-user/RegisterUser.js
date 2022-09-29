@@ -106,7 +106,7 @@ function RegisterUser() {
       firstName:getValues('firstName'),
       lastName:getValues('lastName'),
       email:getValues('email'),
-      phoneNumber:getValues('phoneNumber'),
+      phoneNumber:"+"+getValues('phoneNumber'),
       userType:'Candidate',
       recruiterId: userData?.sub ?? '',
     }
