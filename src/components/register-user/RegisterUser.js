@@ -20,6 +20,7 @@ import UserData from "../Hooks/useAuth";
 import { CANDIDATE, RECRUITER, ADMIN } from "../../model/Constants";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../../redux/actions/userAction";
+import { useNavigate } from "react-router-dom";
 import {
   GET_USERS,
   ADD_USER
@@ -36,13 +37,23 @@ function RegisterUser() {
   const [loggedInUsrType, setLoggedInUserType] = useState("");
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
+  const loading = useSelector((state) => state.loading);
   const userData = UserData();
+  const navigate = useNavigate();
 
+
+  const recruiterData = {
+    recruiterId: userData?.sub ?? ''
+  }
   useEffect(() => {
     Auth.currentUserInfo().then((userInfo) => {
-      setLoggedInUserType(userInfo.attributes["custom:user_type"])
+      if(userInfo?.attributes["custom:user_type"] == "Candidate"){
+        setLoggedInUserType(userInfo.attributes["custom:user_type"])
+        navigate("/document")
+      }
     });
-    dispatch(userAction(GET_USERS));
+    
+    dispatch(userAction(GET_USERS, recruiterData));
   }, [dispatch]);
 
   const phoneRegExp =
@@ -118,7 +129,8 @@ function RegisterUser() {
             token: data.signInUserSession.idToken.jwtToken
           }
           dispatch(userAction(ADD_USER, userData));
-          toast.message("Successfully added"+ user.email);
+          toast.success("Successfully added "+ user.email);
+          dispatch(userAction(GET_USERS, recruiterData));
         })
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
@@ -281,7 +293,7 @@ function RegisterUser() {
         <Toster />
       </form>
     </section>
-    <BasicTable userList={userList}/>
+    <BasicTable loading={loading} userList={userList}/>
    </> 
   );
 }

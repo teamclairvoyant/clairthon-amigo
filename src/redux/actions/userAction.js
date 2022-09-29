@@ -16,7 +16,7 @@ export const userAction = (type,userData) => async (dispatch) => {
       try {
         dispatch({ type: GET_USERS });
         const { data } = await axios.get(
-          DM_BACKEND_SERVICE_URL+ "/api/recruiter/df799490-2433-4a03-8f6b-02f458ed2930"
+          DM_BACKEND_SERVICE_URL+ "/api/recruiter/"+ userData.recruiterId
         )
         dispatch({ type: GET_USERS_SUCCESS, payload: data });
       } catch (error) {
@@ -56,7 +56,6 @@ export const userAction = (type,userData) => async (dispatch) => {
                   toast.error("Invalid parameter provided");
                 }else{
                   dispatch({ type: ADD_USER, payload: data });
-                  toast.success(userData.user.userType+" Successfully registered");
                 }
                 
               } catch (error) {

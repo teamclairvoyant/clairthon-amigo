@@ -21,7 +21,6 @@ export const CandidatedocumentAction =
     switch (type) {
       case GET_REQUESTED_DOCUMENT:
         try {
-          dispatch({ type: GET_REQUESTED_DOCUMENT });
           const { data } = await axios.get(
             `${DM_BACKEND_SERVICE_URL}/api/requiredDocuments/${
               userData?.sub ?? ""

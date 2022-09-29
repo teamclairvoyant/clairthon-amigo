@@ -6,6 +6,9 @@ function User() {
   const user = useMemo(() => {
     return localStorage.getItem("user");
   }, []);
-  return JSON.parse(user);
+   if(user !== null && user != "undefined"){
+      return JSON.parse(user);
+   }
+   return {}
 }
 export default User;

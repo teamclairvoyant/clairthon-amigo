@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import User from "../Hooks/useAuth";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   GET_REQUESTED_DOCUMENT,
   UPLOAD_DOCUMENT,
@@ -26,6 +27,7 @@ function Document() {
   const loading = useSelector((state) => state.documentList.loading);
   const dispatch = useDispatch();
   const error = useSelector((state) => state.documentList.error);
+  const navigate = useNavigate();
 
   const userType = useMemo(() => {
     return user?.["custom:user_type"];
