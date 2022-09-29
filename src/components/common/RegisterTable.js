@@ -64,12 +64,24 @@ export default function BasicTable(props) {
 
   const requestDocument = useCallback(
     (event) => {
-      console.log("rows",rows)
       const candidate = rows.filter(object=>{
         
         return object.candidateId == event
       })
       navigate("/request-documents", {
+        state: { candidate: candidate[0] },
+      });
+    },
+    [navigate, rows]
+  );
+
+  const viewDocument = useCallback(
+    (event) => {
+      const candidate = rows.filter(object=>{
+        
+        return object.candidateId == event
+      })
+      navigate("/document", {
         state: { candidate: candidate[0] },
       });
     },
@@ -105,6 +117,8 @@ export default function BasicTable(props) {
               </TableCell>
               <TableCell className={classes.tableHead} align="center">
               Status
+              </TableCell>
+              <TableCell className={classes.tableHead} align="center">
               </TableCell>
               <TableCell className={classes.tableHead} align="center">
               </TableCell>
@@ -152,6 +166,12 @@ export default function BasicTable(props) {
                   <Button variant="contained" endIcon={<SendIcon />} 
                         onClick={()=>requestDocument(row.candidateId)} id={row.candidateId}>
                     Request document
+                  </Button>
+                </TableCell>
+                <TableCell className={classes.tableCell} align="center">
+                  <Button variant="contained" endIcon={<SendIcon />} 
+                        onClick={()=>viewDocument(row.candidateId)} id={row.candidateId}>
+                    View Document
                   </Button>
                 </TableCell>
               </TableRow>
