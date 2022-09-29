@@ -35,16 +35,15 @@ const useStyles = makeStyles(() => ({
 export default function BasicTable(props) {
   const classes = useStyles();
   const dummy = useRef(null);
-  const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const {userList, loading} = props;
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    if(!userList.loading){
+    if(!loading){
       setRows(userList?.userList);
     }
-  }, [userList?.userList]);
+  }, [loading,userList?.userList]);
   
   useEffect(() => {
     dummy?.current?.scrollIntoView({ behavior: "smooth" });
