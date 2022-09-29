@@ -17,6 +17,10 @@ import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import transformTreeData from '../../services/dmservice';
 import { useLocation } from "react-router-dom";
+import User from "../Hooks/useAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 
 import {
   GET_ALL_DOCUMENTS,
@@ -27,6 +31,7 @@ function RequestDocuments() {
   const userList = useSelector((state) => state.userList);
   const [documentList, setDocumentList] = useState(userList.documents);
   const [isLoading, setIsLoading] = useState(userList.isLoading);
+  const navigate = useNavigate();
 
   const documentListMemo = useMemo(() => {
     return userList.documents
@@ -52,17 +57,22 @@ function RequestDocuments() {
   const [rowsArray, setRowsArray] = useState([]);
   const dispatch = useDispatch();
   const location = useLocation();
+  const user = User();
 
   const candidate = location.state?.candidate ?? null;
 
-  const selectedCandidateName = candidate.fname +" "+ candidate.lname
-  const selectedCandidateEmail = candidate.email
+  const selectedCandidateName = candidate.candidateFirstName +" "+ candidate.candidateLastName
+  const selectedCandidateEmail = candidate.candidateEmail
 
   console.log("selected candidate:",candidate)
 
   useEffect(() => {
     dispatch(documentAction(GET_ALL_DOCUMENTS));
   }, [dispatch]);
+
+  const goToRegister = useCallback(() => {
+    navigate("/register");
+  }, [navigate]);
 
   const onSubmit = () => {
     let docs = undefined;
@@ -74,11 +84,13 @@ function RequestDocuments() {
     })
     
     let data={
-      candidateId: candidate.id,  //need to take from /register page, forwarded when candidate selected from list
-      recruiterId: "dummy_3456",  //needs to take recruiterId from token/ localstorage user object
+      candidateId: candidate.candidateId,  //need to take from /register page, forwarded when candidate selected from list
+      recruiterId: user.sub,  //needs to take recruiterId from token/ localstorage user object
       documents:docs
     }
     dispatch(documentAction(ADD_REQUESTED_DOCUMENT, data));
+    toast.success("Document Request for "+candidate.candidateEmail+" candidate submitted successfully");
+    goToRegister()
   };
 
   const onError = useCallback(() => {
