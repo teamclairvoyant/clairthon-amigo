@@ -3,6 +3,9 @@ import TreeItem from "@mui/lab/TreeItem";
 
 export default function transformTreeData(documentList) {
     let transformedData = [];
+    if(documentList == undefined){
+        return transformedData;
+    }
     Object.entries(documentList)?.map(object => {
 
         let category = object[0];

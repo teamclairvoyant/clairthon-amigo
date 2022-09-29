@@ -16,6 +16,7 @@ import CardContent from '@mui/material/CardContent';
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import transformTreeData from '../../services/dmservice';
+import { useLocation } from "react-router-dom";
 
 import {
   GET_ALL_DOCUMENTS,
@@ -30,9 +31,6 @@ function RequestDocuments() {
   const documentListMemo = useMemo(() => {
     return userList.documents
   }, [userList]);
-
-  const selectedCandidateName = "fname lname"
-  const selectedCandidateEmail = "email@gmail.com"
 
   const {
     handleSubmit,
@@ -53,6 +51,14 @@ function RequestDocuments() {
   const [selectedDocuements, setSelectedDocuments] = useState([]);
   const [rowsArray, setRowsArray] = useState([]);
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const candidate = location.state?.candidate ?? null;
+
+  const selectedCandidateName = candidate.fname +" "+ candidate.lname
+  const selectedCandidateEmail = candidate.email
+
+  console.log("selected candidate:",candidate)
 
   useEffect(() => {
     dispatch(documentAction(GET_ALL_DOCUMENTS));
@@ -68,11 +74,11 @@ function RequestDocuments() {
     })
     
     let data={
-      candidateId: "dummy_1234",
-      recruiterId: "dummy_3456",
+      candidateId: candidate.id,  //need to take from /register page, forwarded when candidate selected from list
+      recruiterId: "dummy_3456",  //needs to take recruiterId from token/ localstorage user object
       documents:docs
     }
-    dispatch(documentAction(ADD_REQUESTED_DOCUMENT, selectedDocuements));
+    dispatch(documentAction(ADD_REQUESTED_DOCUMENT, data));
   };
 
   const onError = useCallback(() => {
@@ -146,10 +152,11 @@ function RequestDocuments() {
 
   return (
     <section className="conatiner mt-8 mb-20 h-full">
-      <div className={`${styles.width100}`}>
+      <div className={`${styles.width100} flex justify-center`}>
         <Card sx={{ minWidth: 275 }}>
           <CardContent>
-            <PersonIcon></PersonIcon> {selectedCandidateName} <EmailIcon></EmailIcon> {selectedCandidateEmail}
+            <div className="pr-32 break-words"><PersonIcon></PersonIcon> {selectedCandidateName}</div>
+            <div  className="pr-24 pt-4 break-words"><EmailIcon></EmailIcon> {selectedCandidateEmail}</div>
           </CardContent>
         </Card>
       </div>

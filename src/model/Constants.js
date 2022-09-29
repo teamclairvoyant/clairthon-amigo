@@ -5,3 +5,4 @@ export const USER =
 export const CANDIDATE = "Candidate";
 export const RECRUITER = "Recruiter";
 export const ADMIN = "admin-user";
+export const DM_BACKEND_SERVICE_URL = "http://document-manager-backend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com";

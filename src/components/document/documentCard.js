@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./documentCard.module.scss";
 import FileUploader from "../common/FileUpload";
 import Button from "@mui/material/Button";
 
-const supportedMimeTypes=['.png','.jpg','.jpeg','.pdf','.docx']
+const supportedMimeTypes = [".png", ".jpg", ".jpeg", ".pdf", ".docx"];
 //  Displays the Test Drive Card
 function DocumentCard(props) {
   const {
@@ -11,15 +11,18 @@ function DocumentCard(props) {
     subText,
     className,
     viewFile,
-    isRecruiter = false,
+    onViewFile,
+    // isRecruiter = false,
     isStudent = false,
     isComplete = false,
     handleFileSelection,
   } = props;
 
+
+
   return (
-    <div
-      className={`my-1 px-1 w-full sm:w-1/5 md:w-1/5 md:my-4 md:px-4 lg:w-1/5 flex xs:px-4 ${styles.parentDiv}`}
+    <div 
+      className={`my-1 px-1 w-full sm:w-1/5 md:w-1/5 md:my-4 md:px-4 lg:w-1/4 flex xs:px-4 ${styles.parentDiv}`}
     >
       <article className="w-full sm:w-auto md:w-full overflow-hidden rounded-lg shadow-lg bg-white rounded-t rounded-b sm:flex sm:flex-col sm:justify-between">
         <div
@@ -37,8 +40,8 @@ function DocumentCard(props) {
           >
             {subText}
           </p>
-          {isStudent  && (<div className="flex justify-between">
-           
+          {isStudent && !isComplete && (
+            <div className="flex justify-between">
               <>
                 <FileUploader
                   disabled={isComplete}
@@ -48,19 +51,23 @@ function DocumentCard(props) {
                   text={text}
                 ></FileUploader>
               </>
-          </div> )}  
-          {isRecruiter && ( <div className="flex justify-center">
-         
+            </div>
+          )}
+          {isComplete && (
+            <div className="flex justify-center pt-2">
               <Button
                 variant="contained"
-                className="text-center"
+                className="text-center w-32 h-8"
                 size="small"
                 component="span"
-                onClick={viewFile}
+                onClick={(e) => {
+                  onViewFile(e, text);
+                }}
               >
                 {viewFile}
               </Button>
-          </div> )}
+            </div>
+          )}
         </footer>
         <span className={isComplete ? styles.bgGren : styles.bgRed}></span>
       </article>
