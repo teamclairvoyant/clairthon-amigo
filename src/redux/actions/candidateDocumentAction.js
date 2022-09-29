@@ -84,10 +84,10 @@ export const CandidatedocumentAction =
         try {
           dispatch({ type: DOWNLOAD_ALL });
           const { data } = await axios.get(
-            `${DM_BACKEND_SERVICE_URL}/api/downloadAll/${userData?.sub ?? ''}`
+            `${DM_BACKEND_SERVICE_URL}/api/downloadAll/${userData}`
           );
           window.open(
-            `${DM_BACKEND_SERVICE_URL}/api/download/${userData}`
+            `${DM_BACKEND_SERVICE_URL}/api/downloadAll/${userData}`
           );
 
           dispatch({ type: DOWNLOAD_ALL_SUCCESS, message: "success" });

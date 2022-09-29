@@ -113,7 +113,7 @@ function Document() {
         </div>
         <div className="flex justify-end">
           <>
-            {docLists && docLists.length > 0 && (
+            {docLists !== null && (
               <Button
                 variant="contained"
                 className="text-center"
@@ -148,7 +148,7 @@ function Document() {
             </>
           ))}
         </div>
-        {userType === "Candidate" && docLists && docLists.length > 0 && (
+        {userType === "Candidate" && docLists && docLists !== null && (
           <LinearProgressWithLabel
             value={calculateProgress > 0 ? calculateProgress : 0}
           />

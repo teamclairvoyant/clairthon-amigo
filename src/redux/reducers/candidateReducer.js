@@ -82,7 +82,7 @@ export const candidateReducer = (state = { documents: [] }, action) => {
       case DOWNLOAD_ALL:
         return {
           ...state,
-          loading: true,
+          loading: false,
           message: action.payload,
         };
   

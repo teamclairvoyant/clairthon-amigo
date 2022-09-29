@@ -1,8 +1,8 @@
-FROM node:18 as build 
+FROM node:14-alpine3.15 as build 
 EXPOSE 80
 WORKDIR /react-app
 COPY package*.json ./
-RUN yarn install --frozen-lockfile --network-timeout 1000000
+RUN yarn install
 COPY . .
 RUN yarn run build
 FROM nginx:1.19
