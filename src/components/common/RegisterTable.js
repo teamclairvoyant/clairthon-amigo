@@ -51,7 +51,7 @@ const rows = [
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: "940px",
+    width: "100%",
     borderRadius: "5px",
     paddingBottom: "10px",
   },
@@ -106,6 +106,8 @@ export default function BasicTable() {
               </TableCell>
               <TableCell className={classes.tableHead} align="center">
                 Status
+              </TableCell>
+              <TableCell className={classes.tableHead} align="center">
               </TableCell>
             </TableRow>
           </TableHead>
