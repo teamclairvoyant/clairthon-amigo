@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { CANDIDATE } from "../../model/Constants";
+import { RECRUITER, CANDIDATE, ADMIN } from "../../model/Constants";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import styles from "./Login.module.scss";
@@ -13,12 +13,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "@mui/material/Link";
 import Toster from "../common/Toster";
 import { toast } from "react-toastify";
+import User from "../Hooks/useAuth";
 
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedInUsrType, setLoggedInUserType] = useState("");
   const navigate = useNavigate();
+  const user = User();
 
   const validationSchema = yup.object({
     email: yup
@@ -44,6 +46,16 @@ function Login(props) {
     resolver: yupResolver(validationSchema),
   });
 
+  const goToRegister = useCallback(() => {
+    navigate("/register");
+  }, [navigate]);
+
+  useEffect(()=>{
+    if(user !=={} && (user?.["custom:user_type"] == RECRUITER ||  user?.["custom:user_type"] == ADMIN)){
+      goToRegister();
+    }
+  },[goToRegister]);
+
   const goToSetPassword = useCallback(
     (username, password) => {
       navigate("/set-new-password", {
@@ -53,9 +65,7 @@ function Login(props) {
     [navigate]
   );
 
-  const goToRegister = useCallback(() => {
-    navigate("/register");
-  }, [navigate]);
+ 
   const goToConfirmPage = useCallback(() => {
     navigate("/confirm-user", { state: { username: email } });
   }, [navigate, email]);

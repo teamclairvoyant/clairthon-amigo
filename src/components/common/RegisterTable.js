@@ -9,7 +9,6 @@ import Paper from "@mui/material/Paper";
 import "./RegisterTable.module.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@mui/system";
-import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -38,7 +37,7 @@ export default function BasicTable(props) {
   const dummy = useRef(null);
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
-  const {userList} = props;
+  const {userList, loading} = props;
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -77,7 +76,7 @@ export default function BasicTable(props) {
     [navigate, rows]
   );
 
-  if(rows && rows.length ==0){
+  if(loading){
     return (
       <section className={styles.BgColor}>
         <div className="flex justify-center pt-10">

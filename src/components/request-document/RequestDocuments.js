@@ -61,18 +61,21 @@ function RequestDocuments() {
 
   const candidate = location.state?.candidate ?? null;
 
-  const selectedCandidateName = candidate.candidateFirstName +" "+ candidate.candidateLastName
-  const selectedCandidateEmail = candidate.candidateEmail
+  const goToRegister = useCallback(() => {
+    navigate("/register");
+  }, [navigate]);
 
-  console.log("selected candidate:",candidate)
+  if(candidate == undefined){
+    toast.info("Select candidate to request document")
+    goToRegister();
+  }
+
+  const selectedCandidateName = candidate?.candidateFirstName +" "+ candidate?.candidateLastName
+  const selectedCandidateEmail = candidate?.candidateEmail
 
   useEffect(() => {
     dispatch(documentAction(GET_ALL_DOCUMENTS));
   }, [dispatch]);
-
-  const goToRegister = useCallback(() => {
-    navigate("/register");
-  }, [navigate]);
 
   const onSubmit = () => {
     let docs = undefined;
