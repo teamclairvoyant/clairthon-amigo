@@ -18,6 +18,14 @@ import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import Spineer from "../../components/spineer/spineer";
 import styles from "../../components/document/document.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+
+
+import {
+  UPDATE_STATUS_FOR_CANDIDATE
+} from "../../redux/constants/user";
+
+import { CandidatedocumentAction } from "../../redux/actions/candidateDocumentAction";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -38,6 +46,7 @@ export default function BasicTable(props) {
   const navigate = useNavigate();
   const {userList, loading} = props;
   const [rows, setRows] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(!loading){
@@ -58,7 +67,15 @@ export default function BasicTable(props) {
     if (index >= 0) {
       tempArray[index].candidateStatus = event.target.value;
       setRows([...tempArray])
+      var userData = {
+        candidateId: candidateId,
+        candidateStatus: event.target.value
+      }
+      dispatch(CandidatedocumentAction(UPDATE_STATUS_FOR_CANDIDATE, userData));
     }
+
+    
+
   },[rows]);
 
   const requestDocument = useCallback(

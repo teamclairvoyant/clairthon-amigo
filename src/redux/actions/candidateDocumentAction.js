@@ -108,9 +108,8 @@ export const CandidatedocumentAction =
         case UPDATE_STATUS_FOR_CANDIDATE:
         try {
 
-          //var candidateId= userData;
-          const { data } = await axios.get(
-            `${DM_BACKEND_SERVICE_URL}/api/updateStatus/${userData}/${userData}`
+          const { data } = await axios.put(
+            `${DM_BACKEND_SERVICE_URL}/api/updateStatus/${userData.candidateId}/${userData.candidateStatus}`
           );
 
           dispatch({ type: UPDATE_STATUS_FOR_CANDIDATE_SUCCESS, message: "success" });
