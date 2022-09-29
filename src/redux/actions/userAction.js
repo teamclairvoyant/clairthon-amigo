@@ -7,6 +7,7 @@ import {
   ADD_USER_FAILED
 } from "../constants/user";
 import { toast } from "react-toastify";
+import { USER_REGISTER_LAMBDA } from "../../model/Constants"
 
 export const userAction = (type,userData) => async (dispatch) => {
   switch (type) {
@@ -32,8 +33,9 @@ export const userAction = (type,userData) => async (dispatch) => {
     case ADD_USER:
         {
             try {
+                const refisterUserUrl = USER_REGISTER_LAMBDA +"/dev/user"
                 const { data } = await axios.post(
-                  "https://u8evk630vj.execute-api.ap-south-1.amazonaws.com/dev/user", {user:userData.user},{
+                  refisterUserUrl, {user:userData.user},{
                   headers:{
                     'Content-type': 'application/json; charset=UTF-8',
                     'Authorization': userData.token,
