@@ -41,17 +41,26 @@ function ForgotPassword() {
     // setLoader(false);
   }, []);
 
+  const goToConfirmPage = useCallback(() => {
+    navigate("/confirm-user", { state: { username: getValues("email") } });
+  }, [navigate, getValues("email")]);
+
   const onSubmit = useCallback(async() => {
    //setEmail(getValues("email"));
   try {
     await Auth.forgotPassword(getValues("email"))
       .then((user) => {
         if (user) {
-          navigate("/register");
+          goToConfirmPage()
         }
       })
       .catch((err) => {
-        toast.error(err.message);
+        if(err.code == 'NotAuthorizedException'){
+          toast.error("Can not set password in current state, signIn with temp password sent to your emaild");
+        }else{
+          toast.error(err.message);
+        }
+        
       });
   } catch (error) {
     toast.error("Error Occured Please try again later");

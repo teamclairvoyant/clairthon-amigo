@@ -17,41 +17,12 @@ import Select from '@mui/material/Select';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
-
-function createData(id,fname, lname, email, contact, status) {
-  return { id, fname, lname, email, contact, status };
-}
-
-const rows = [
-  createData(
-    "1",
-    "Rushikesh",
-    "Patil",
-    "rushikesh.patil@clairvoyantsoft.com",
-    1234567891,
-    "Active"
-  ),
-  createData(
-    "2",
-    "Sandeep",
-    "Pawar",
-    "sandeep.pawar@clairvoyantsoft.com",
-    2345678912,
-    "Active"
-  ),
-  createData(
-    "3",
-    "Pranali",
-    "Chaudhari",
-    "pranali.chaudhari@clairvoyantsoft.com",
-    3456789123,
-    "Pending"
-  ),
-];
+import Spineer from "../../components/spineer/spineer";
+import styles from "../../components/document/document.module.scss";
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: "940px",
+    width: "100%",
     borderRadius: "5px",
     paddingBottom: "10px",
   },
@@ -62,31 +33,60 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function BasicTable() {
+export default function BasicTable(props) {
   const classes = useStyles();
   const dummy = useRef(null);
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
+  const {userList} = props;
+  const [rows, setRows] = useState([]);
 
+  useEffect(() => {
+    if(!userList.loading){
+      setRows(userList?.userList);
+    }
+  }, [userList?.userList]);
+  
   useEffect(() => {
     dummy?.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const handleChange = (event) => {
-    //setStatus(event.target.value);
-  };
+  const handleChange = useCallback((event, candidateId) => {
+    const tempArray = rows;
+    const index = tempArray.findIndex((object) =>{
+      return object.candidateId == candidateId;
+    })
+
+    if (index >= 0) {
+      tempArray[index].candidateStatus = event.target.value;
+      setRows([...tempArray])
+    }
+  },[rows]);
 
   const requestDocument = useCallback(
     (event) => {
+      console.log("rows",rows)
       const candidate = rows.filter(object=>{
-        return object.id === event.target.id
+        
+        return object.candidateId == event
       })
       navigate("/request-documents", {
         state: { candidate: candidate[0] },
       });
     },
-    [navigate]
+    [navigate, rows]
   );
+
+  if(rows && rows.length ==0){
+    return (
+      <section className={styles.BgColor}>
+        <div className="flex justify-center pt-10">
+          <Spineer />
+        </div>
+      </section>
+    );
+  }
+
 
   return (
     <Container className={classes.root} ref={dummy}>
@@ -105,12 +105,14 @@ export default function BasicTable() {
                 Contact
               </TableCell>
               <TableCell className={classes.tableHead} align="center">
-                Status
+              Status
+              </TableCell>
+              <TableCell className={classes.tableHead} align="center">
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows && rows.length>0 && rows.map((row) => (
               <TableRow
                 key={row.email}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -120,38 +122,38 @@ export default function BasicTable() {
                   className={classes.tableCell}
                   scope="row"
                 >
-                  {row.fname}
+                  {row.candidateFirstName}
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
-                  {row.lname}
+                  {row.candidateLastName}
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
-                  {row.email}
+                  {row.candidateEmail}
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
-                  {row.contact}
-                </TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  <Button variant="contained" endIcon={<SendIcon />} 
-                        onClick={requestDocument} id={row.id}>
-                    Request document
-                  </Button>
+                  {row.candidatePhoneNumber}
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                    <InputLabel id="demo-select-small">Status</InputLabel>
+                    <InputLabel id="demo-select-small"></InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
-                      id={row.fname}
-                      value={status}
+                      id={row.candidateId}
+                      value={row.candidateStatus?? "new"}
                       label="Document Status"
-                      onChange={handleChange}
+                      onChange={(e)=>handleChange(e, row.candidateId)}
                     >
-                      <MenuItem value="new">New</MenuItem>
-                      <MenuItem value="complete">Complete</MenuItem>
-                      <MenuItem value="pending">Pending</MenuItem>
+                      <MenuItem name={row.candidateId} value="new">New</MenuItem>
+                      <MenuItem name={row.candidateId} value="pending">Pending</MenuItem>
+                      <MenuItem name={row.candidateId} value="complete">Complete</MenuItem>
                     </Select>
                   </FormControl>
+                </TableCell>
+                <TableCell className={classes.tableCell} align="center">
+                  <Button variant="contained" endIcon={<SendIcon />} 
+                        onClick={()=>requestDocument(row.candidateId)} id={row.candidateId}>
+                    Request document
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -16,7 +16,7 @@ import NativeSelect from '@mui/material/NativeSelect';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-
+import UserData from "../Hooks/useAuth";
 import { CANDIDATE, RECRUITER, ADMIN } from "../../model/Constants";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../../redux/actions/userAction";
@@ -36,7 +36,7 @@ function RegisterUser() {
   const [loggedInUsrType, setLoggedInUserType] = useState("");
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
-  const { loading, users, error,message } = userList;
+  const userData = UserData();
 
   useEffect(() => {
     Auth.currentUserInfo().then((userInfo) => {
@@ -44,8 +44,6 @@ function RegisterUser() {
     });
     dispatch(userAction(GET_USERS));
   }, [dispatch]);
-
-
 
   const phoneRegExp =
     /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
@@ -105,8 +103,9 @@ function RegisterUser() {
       firstName:getValues('firstName'),
       lastName:getValues('lastName'),
       email:getValues('email'),
-      phoneNumber:getValues('phoneNumber'),
-      userType:'Candidate'
+      phoneNumber:"+"+getValues('phoneNumber'),
+      userType:'Candidate',
+      recruiterId: userData?.sub ?? '',
     }
 
     Auth.currentAuthenticatedUser()
@@ -119,7 +118,6 @@ function RegisterUser() {
             token: data.signInUserSession.idToken.jwtToken
           }
           dispatch(userAction(ADD_USER, userData));
-          dispatch(userAction(GET_USERS));
           toast.message("Successfully added"+ user.email);
         })
         .then((data) => console.log(data))
@@ -283,7 +281,7 @@ function RegisterUser() {
         <Toster />
       </form>
     </section>
-    <BasicTable />
+    <BasicTable userList={userList}/>
    </> 
   );
 }

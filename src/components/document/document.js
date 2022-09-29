@@ -57,7 +57,7 @@ function Document() {
         const data = new FormData();
         data.append("file", file[0]);
         data.append("description", name);
-        data.append("userId", "32bd9e35-9217-4631-85a2-9229ad1e96e1");
+        data.append("userId", user?.sub ?? "");
 
         await dispatch(CandidatedocumentAction(UPLOAD_DOCUMENT, data));
         await getDocuments();
@@ -68,21 +68,22 @@ function Document() {
         toast.error("File not supported");
       }
     },
-    [dispatch, error, getDocuments]
+    [dispatch, error, getDocuments, user?.sub]
   );
 
   const onViewFile = useCallback(
     async (e, fileName) => {
-      await dispatch(CandidatedocumentAction(VIEW_FILE, fileName));
+      await dispatch(
+        CandidatedocumentAction(VIEW_FILE, fileName, user?.sub ?? "")
+      );
       // await getDocuments();
     },
     [dispatch]
   );
   const downloadAll = useCallback(async () => {
-    await dispatch(CandidatedocumentAction(DOWNLOAD_ALL, "232323"));
+    await dispatch(CandidatedocumentAction(DOWNLOAD_ALL, user?.sub ?? ""));
     await getDocuments();
-  }, [dispatch, getDocuments]);
-
+  }, [dispatch, getDocuments, user?.sub]);
 
   if (loading) {
     return (
@@ -100,24 +101,30 @@ function Document() {
         <h1 className="text-center font-bold font-lg text-main">
           {COPY.WELCOME} {user?.given_name} {user?.family_name}
         </h1>
-        <p className="text-center font-bold font-lg text-main">
-          {COPY.ACTION_ITEMS}
-        </p>
+        {userType === "Candidate" && (
+          <p className="text-center font-bold font-lg text-main">
+            {COPY.ACTION_ITEMS}
+          </p>
+        )}
       </div>
       <div className="font-bold font-lg mx-12">
         <div className="flex justify-start">
           <h1 className="flex justify-start">{COPY.ACTION_REQUIRED}</h1>
         </div>
         <div className="flex justify-end">
-          <Button
-            variant="contained"
-            className="text-center"
-            size="small"
-            component="span"
-            onClick={downloadAll}
-          >
-            {COPY.DOWNLOAD_ALL}
-          </Button>
+          <>
+            {docLists && docLists.length > 0 && (
+              <Button
+                variant="contained"
+                className="text-center"
+                size="small"
+                component="span"
+                onClick={downloadAll}
+              >
+                {COPY.DOWNLOAD_ALL}
+              </Button>
+            )}
+          </>
         </div>
       </div>
       <div className="container my-4 mx-auto rounded-lg shadow-lg bg-white rounded-t rounded-b">
@@ -141,7 +148,7 @@ function Document() {
             </>
           ))}
         </div>
-        {userType === "Candidate" && (
+        {userType === "Candidate" && docLists && docLists.length > 0 && (
           <LinearProgressWithLabel
             value={calculateProgress > 0 ? calculateProgress : 0}
           />
