@@ -46,6 +46,13 @@ export const userAction = (type,userData) => async (dispatch) => {
                       data && data.message
                   });
                   toast.error("Account with given email already exist");
+                }else if(data.code==='InvalidParameterException'){
+                  dispatch({
+                    type: ADD_USER_FAILED,
+                    payload:
+                      data && data.message
+                  });
+                  toast.error("Invalid parameter provided");
                 }else{
                   dispatch({ type: ADD_USER, payload: data });
                   toast.success(userData.user.userType+" Successfully registered");
