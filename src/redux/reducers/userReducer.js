@@ -9,18 +9,18 @@ import {
   GET_ALL_FAILED
 } from "../constants/user";
 
-export const userReducer = (state = { users: [], documents: [] }, action) => {
+export const userReducer = (state = { userList: [], documents: [] }, action) => {
   switch (action.type) {
     case GET_USERS:
       return {
         loading: true,
-        users: [],
+        userList: [],
       };
 
     case GET_USERS_SUCCESS:
       return {
         loading: false,
-        users: action.payload,
+        userList: action.payload,
       };
 
     case GET_USERS_FAILED:

@@ -7,6 +7,7 @@ import {
   ADD_USER_FAILED
 } from "../constants/user";
 import { toast } from "react-toastify";
+import { DM_BACKEND_SERVICE_URL } from "../../model/Constants";
 
 export const userAction = (type,userData) => async (dispatch) => {
   switch (type) {
@@ -15,8 +16,8 @@ export const userAction = (type,userData) => async (dispatch) => {
       try {
         dispatch({ type: GET_USERS });
         const { data } = await axios.get(
-          "https://jsonplaceholder.typicode.com/users"
-        );
+          DM_BACKEND_SERVICE_URL+ "/api/recruiter/df799490-2433-4a03-8f6b-02f458ed2930"
+        )
         dispatch({ type: GET_USERS_SUCCESS, payload: data });
       } catch (error) {
         dispatch({

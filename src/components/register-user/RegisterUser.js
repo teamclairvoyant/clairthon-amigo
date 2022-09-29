@@ -36,7 +36,6 @@ function RegisterUser() {
   const [loggedInUsrType, setLoggedInUserType] = useState("");
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
-  const { loading, users, error,message } = userList;
   const userData = UserData();
 
   useEffect(() => {
@@ -119,7 +118,6 @@ function RegisterUser() {
             token: data.signInUserSession.idToken.jwtToken
           }
           dispatch(userAction(ADD_USER, userData));
-          dispatch(userAction(GET_USERS));
           toast.message("Successfully added"+ user.email);
         })
         .then((data) => console.log(data))
@@ -283,7 +281,7 @@ function RegisterUser() {
         <Toster />
       </form>
     </section>
-    <BasicTable />
+    <BasicTable userList={userList}/>
    </> 
   );
 }
