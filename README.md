@@ -23,4 +23,5 @@ http://localhost:3000
 http://document-manager-frontend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com/
 
 ## CI/CD ##
+http://ec2-13-233-161-75.ap-south-1.compute.amazonaws.com:8080/
 
