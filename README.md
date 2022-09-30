@@ -3,10 +3,10 @@
 ## App Links ##
 
 ### Local: ###
-http://localhost:3000
+http://localhost:8080/swagger-ui/index.html#/
 
-### live: ### 
-http://document-manager-frontend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com/
+### live swagger: ### 
+http://document-manager-backend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com/swagger-ui/index.html#/
 
 
 ## CI/CD ##
