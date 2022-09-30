@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import Spineer from "../../components/spineer/spineer";
 import styles from "../../components/document/document.module.scss";
 import { useDispatch, useSelector } from "react-redux";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import {
   UPDATE_STATUS_FOR_CANDIDATE
@@ -185,7 +186,7 @@ export default function BasicTable(props) {
                   
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
-                  <Button variant="contained" disabled={row.candidateStatus ===  "new"} endIcon={<SendIcon />} 
+                  <Button variant="contained" disabled={row.candidateStatus ===  "new"} endIcon={<VisibilityIcon />} 
                         onClick={()=>viewDocument(row.candidateId)} id={row.candidateId}>
                     View Document
                   </Button>
