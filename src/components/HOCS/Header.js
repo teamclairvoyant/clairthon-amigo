@@ -57,7 +57,7 @@ function Header(props) {
           </Link>
           <div className="flex-grow" />
           <div className="flex items-center">
-            <Tooltip title="Account settings">
+            <Tooltip title={user?.["custom:user_type"]}>
               <IconButton
                 onClick={handleClick}
                 size="small"
@@ -122,6 +122,7 @@ function Header(props) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={onLogout}>{COPY.LOGOUT}</MenuItem>
+        {user?.["custom:user_type"]}
       </Menu>
     </div>
   );
