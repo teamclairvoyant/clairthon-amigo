@@ -6,7 +6,7 @@ import '@aws-amplify/ui-react/styles.css'
 import { Routes, Route } from "react-router-dom"
 import Login from './components/login/Login'
 import RegisterUser from './components/register-user/RegisterUser'
-import ConfirmUser from './components/confirm-user/ConfirmUser'
+import ConfirmUser from './components/confirm-user/confirmuser'
 import Document from './components/document/document'
 import SetNewPassword from './components/login/SetNewPassword'
 import ForgotPassword from './components/forgot-password/ForgotPassword'
@@ -44,6 +44,7 @@ function App() {
               <RequestDocuments/>
             </Protected>
         } />
+        <Route path="*" element={ <Login/> } />
       </Routes>
     </div>
   );
