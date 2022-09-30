@@ -143,7 +143,7 @@ export default function BasicTable(props) {
           <TableBody>
             {rows && rows.length>0 && rows.map((row) => (
               <TableRow
-                key={row.email}
+                key={row.candidateId}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell
@@ -172,9 +172,9 @@ export default function BasicTable(props) {
                       label="Document Status"
                       onChange={(e)=>handleChange(e, row.candidateId)}
                     >
-                      <MenuItem name={row.candidateId} value="new">New</MenuItem>
-                      <MenuItem name={row.candidateId} value="pending">Pending</MenuItem>
-                      <MenuItem name={row.candidateId} value="complete">Complete</MenuItem>
+                      <MenuItem key={1} name={row.candidateId} value="new">New</MenuItem>
+                      <MenuItem key={2} name={row.candidateId} value="pending">Pending</MenuItem>
+                      <MenuItem key={3} name={row.candidateId} value="complete">Complete</MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>

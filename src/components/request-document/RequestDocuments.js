@@ -3,7 +3,7 @@ import TreeItem from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import styles from "./RequestDocument.module.scss";
 import Button from "@mui/material/Button";
 import { COPY } from "../../constant";
@@ -188,6 +188,7 @@ function RequestDocuments() {
                 onNodeSelect={handleSelect}
                 multiSelect
                 sx={{ height: 200, flexGrow: 1, maxWidth: 400, overflowY: 'auto', marginTop: 5 }}
+                defaultExpanded={["disabled-Documents", "disabled-Goverment", "disabled-Education", "disabled-Experiance"]}
               >
 
               {!isLoading && getTreeItemsFromData(documentListMemo)}

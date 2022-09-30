@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import styles from "../request-document/RequestDocument.module.scss";
 
 function RequestedDocumentList(props) {
     const {
@@ -23,9 +24,9 @@ function RequestedDocumentList(props) {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Sr. No</TableCell>
-                        <TableCell>Document Name</TableCell>
-                        <TableCell>Remove</TableCell>
+                        <TableCell className={`${styles.tableHead}`}>Sr. No</TableCell>
+                        <TableCell className={`${styles.tableHead}`}>Document Name</TableCell>
+                        <TableCell className={`${styles.tableHead}`}>Remove</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
