@@ -1,10 +1,12 @@
-Front end for document manager app
+#Front end for document manager app#
 
-App links:
+### App Linkes ###
 
-local: http://localhost:3000/register
-live: http://document-manager-frontend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com/
+# Local: #
+http://localhost:3000
 
-CI/CD: 
+# live: # 
+http://document-manager-frontend.eba-uaum3bdf.ap-south-1.elasticbeanstalk.com/
 
 
+### CI/CD ###
