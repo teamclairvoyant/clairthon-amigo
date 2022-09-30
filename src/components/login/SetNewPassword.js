@@ -45,12 +45,7 @@ function SetNewPassword(props) {
         Auth.signIn(username, oldPassword).then((user) => {
           Auth.completeNewPassword(user, password)
             .then((user) => {
-              localStorage.setItem("user", JSON.stringify(user?.challengeParam?.userAttributes));
-              if(user?.challengeParam?.userAttributes?.["custom:user_type"] == RECRUITER){
-                navigate("/register");
-              }else{
-                navigate("/document");
-              }
+              navigate("/login");
             })
             .catch((e) => {
               console.log(e);

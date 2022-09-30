@@ -39,7 +39,7 @@ export const CandidatedocumentAction =
                 ? error.response.data.message
                 : error.message,
           });
-          toast.error("Error occured.Please try again later.");
+          //toast.error("Error occured.Please try again later.");
         }
         break;
       case UPLOAD_DOCUMENT:
