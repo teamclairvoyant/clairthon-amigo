@@ -20,9 +20,9 @@ import { useLocation } from "react-router-dom";
 import User from "../Hooks/useAuth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
-
+import { CandidatedocumentAction } from "../../redux/actions/candidateDocumentAction";
 import {
+  UPDATE_STATUS_FOR_CANDIDATE,
   GET_ALL_DOCUMENTS,
   ADD_REQUESTED_DOCUMENT
 } from "../../redux/constants/user";
@@ -92,6 +92,11 @@ function RequestDocuments() {
       documents:docs
     }
     dispatch(documentAction(ADD_REQUESTED_DOCUMENT, data));
+    var userData = {
+      candidateId: candidate.candidateId,
+      candidateStatus: "pending"
+    }
+    dispatch(CandidatedocumentAction(UPDATE_STATUS_FOR_CANDIDATE, userData));
     toast.success("Document Request for "+candidate.candidateEmail+" candidate submitted successfully");
     goToRegister()
   };

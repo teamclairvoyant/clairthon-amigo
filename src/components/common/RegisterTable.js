@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import Spineer from "../../components/spineer/spineer";
 import styles from "../../components/document/document.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import {
   UPDATE_STATUS_FOR_CANDIDATE
@@ -173,19 +173,20 @@ export default function BasicTable(props) {
                       onChange={(e)=>handleChange(e, row.candidateId)}
                     >
                       <MenuItem key={1} name={row.candidateId} value="new">New</MenuItem>
-                      <MenuItem key={2} name={row.candidateId} value="pending">Pending</MenuItem>
+                      <MenuItem key={2} name={row.candidateId} value="pending">In Review</MenuItem>
                       <MenuItem key={3} name={row.candidateId} value="complete">Complete</MenuItem>
                     </Select>
                   </FormControl>
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
-                  <Button variant="contained" endIcon={<SendIcon />} 
+                    <Button variant="contained" disabled={row.candidateStatus !==  "new"} endIcon={<SendIcon />} 
                         onClick={()=>requestDocument(row.candidateId)} id={row.candidateId}>
                     Request document
-                  </Button>
+                    </Button>
+                  
                 </TableCell>
                 <TableCell className={classes.tableCell} align="center">
-                  <Button variant="contained" endIcon={<SendIcon />} 
+                  <Button variant="contained" disabled={row.candidateStatus ===  "new"} endIcon={<VisibilityIcon />} 
                         onClick={()=>viewDocument(row.candidateId)} id={row.candidateId}>
                     View Document
                   </Button>

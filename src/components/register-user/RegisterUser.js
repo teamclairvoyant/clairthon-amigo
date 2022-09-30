@@ -117,15 +117,12 @@ function RegisterUser() {
             token: data.signInUserSession.idToken.jwtToken
           }
           dispatch(userAction(ADD_USER, userData));
-          toast.success("Successfully added "+ user.email);
           dispatch(userAction(GET_USERS, recruiterData));
         })
         .catch((err) => console.log(err));
   };
 
   const onError = useCallback(() => {
-    //notificationService.showError(COPY.VALIDATION_ENTER_ALL_FIELDS);
-    // setLoader(false);
   }, []);
 
   function dropDown() {
