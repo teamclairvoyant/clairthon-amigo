@@ -117,6 +117,7 @@ function RegisterUser() {
             token: data.signInUserSession.idToken.jwtToken
           }
           dispatch(userAction(ADD_USER, userData));
+          
           dispatch(userAction(GET_USERS, recruiterData));
         })
         .catch((err) => console.log(err));

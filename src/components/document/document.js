@@ -10,6 +10,7 @@ import User from "../Hooks/useAuth";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Link from '@mui/material/Link';
 import {
   GET_REQUESTED_DOCUMENT,
   UPLOAD_DOCUMENT,
@@ -185,6 +186,8 @@ function Document() {
           />
         )}
       </div>
+
+      <Link href="/register">Go back</Link>
       <Toster />
     </section>
   );
