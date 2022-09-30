@@ -12,22 +12,18 @@ import * as yup from "yup";
 import TextBox from "../common/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import Toster from "../common/Toster";
-import NativeSelect from '@mui/material/NativeSelect';
-import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
+import NativeSelect from "@mui/material/NativeSelect";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 import UserData from "../Hooks/useAuth";
 import { CANDIDATE, RECRUITER, ADMIN } from "../../model/Constants";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../../redux/actions/userAction";
 import { useNavigate } from "react-router-dom";
-import {
-  GET_USERS,
-  ADD_USER
-} from "../../redux/constants/user";
+import { GET_USERS, ADD_USER } from "../../redux/constants/user";
 import { toast } from "react-toastify";
 import BasicTable from "../common/RegisterTable";
-
 
 function RegisterUser() {
   const [userType, setUserType] = useState("Recruiter");
@@ -37,18 +33,19 @@ function RegisterUser() {
   const loading = useSelector((state) => state.loading);
   const userData = UserData();
   const navigate = useNavigate();
+  const [Authdata, setData] = useState(null);
 
   const recruiterData = {
-    recruiterId: userData?.sub ?? ''
-  }
+    recruiterId: userData?.sub ?? "",
+  };
   useEffect(() => {
     Auth.currentUserInfo().then((userInfo) => {
-      if(userInfo?.attributes["custom:user_type"] == "Candidate"){
-        navigate("/document")
+      if (userInfo?.attributes["custom:user_type"] == "Candidate") {
+        navigate("/document");
       }
-      setLoggedInUserType(userInfo.attributes["custom:user_type"])
+      setLoggedInUserType(userInfo.attributes["custom:user_type"]);
     });
-    
+
     dispatch(userAction(GET_USERS, recruiterData));
   }, [dispatch]);
 
@@ -97,34 +94,34 @@ function RegisterUser() {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = () => {
-    const user={
-      firstName:getValues('firstName'),
-      lastName:getValues('lastName'),
-      email:getValues('email'),
-      phoneNumber:"+"+getValues('phoneNumber'),
+  const onSubmit = useCallback(async () => {
+    const user = {
+      firstName: getValues("firstName"),
+      lastName: getValues("lastName"),
+      email: getValues("email"),
+      phoneNumber: "+" + getValues("phoneNumber"),
       userType: userType,
-      recruiterId: userData?.sub ?? '',
-    }
-
+      recruiterId: userData?.sub ?? "",
+    };
+  
     Auth.currentAuthenticatedUser()
-        .then((data) => {
-          if (loggedInUsrType === RECRUITER) {
-            user.userType = CANDIDATE;
-          }
-          const userData = {
-            user:user,
-            token: data.signInUserSession.idToken.jwtToken
-          }
-          dispatch(userAction(ADD_USER, userData));
-          
-          dispatch(userAction(GET_USERS, recruiterData));
-        })
-        .catch((err) => console.log(err));
-  };
+      .then((data) => {
+        setData(data ?? null);
+      })
+      .catch((err) => console.log(err));
 
-  const onError = useCallback(() => {
-  }, []);
+      const useData = {
+        user: user,
+        token: Authdata?.signInUserSession?.idToken?.jwtToken,
+      };
+      if (loggedInUsrType === RECRUITER) {
+        user.userType = CANDIDATE;
+      }
+      await dispatch(userAction(ADD_USER, useData));
+      await dispatch(userAction(GET_USERS, recruiterData));
+  }, [Authdata?.signInUserSession?.idToken?.jwtToken, dispatch, getValues, loggedInUsrType, recruiterData, userData?.sub, userType]);
+
+  const onError = useCallback(() => {}, []);
 
   function dropDown() {
     return (
@@ -141,8 +138,8 @@ function RegisterUser() {
                 <NativeSelect
                   defaultValue={RECRUITER}
                   inputProps={{
-                    name: 'userType',
-                    id: 'userType',
+                    name: "userType",
+                    id: "userType",
                   }}
                   onChange={handleInputChange}
                 >
@@ -159,128 +156,126 @@ function RegisterUser() {
 
   return (
     <>
-    <section className="conatiner mt-8 mb-20 h-full">
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
-        <div
-          className={`flex bg-primary bg-no-repeat bg-cover marginTop ${styles.backImg}`}
-        >
-          <main
-            className={`${styles.backgroundColor} w-full max-w-md px-12 marginTop rounded mx-auto`}
+      <section className="conatiner mt-8 mb-20 h-full">
+        <form onSubmit={handleSubmit(onSubmit, onError)}>
+          <div
+            className={`flex bg-primary bg-no-repeat bg-cover marginTop ${styles.backImg}`}
           >
-            <div className={styles.tenantLogoContainer}>
-              <img
-                src="clair-logo-white.svg"
-                alt={COPY.ALT_TEXT_LOGO}
-                className="my-0 mx-auto my-auto"
-              />
-            </div>
-            <h5 className="text-center font-semibold text-main">
-              {COPY.REGISTER_USER}
-            </h5>
-            <div className="pb-3">
-              <Controller
-                control={control}
-                name={"firstName"}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <TextBox
-                    fullWidth
-                    id="firstName"
-                    name="firstName"
-                    label="First Name"
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                  />
-                )}
-              />
-              <FormHelperText className={styles.errorMessage}>
-                {errors?.firstName && errors.firstName.message}
-              </FormHelperText>
-            </div>
-            <div className="pb-3">
-              <Controller
-                control={control}
-                name={"lastName"}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <TextBox
-                    fullWidth
-                    id="lastName"
-                    name="lastName"
-                    label="Last Name"
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                  />
-                )}
-              />
-              <FormHelperText className={styles.errorMessage}>
-                {errors?.lastName && errors.lastName.message}
-              </FormHelperText>
-            </div>
-            <div className="pb-3">
-              <Controller
-                control={control}
-                name={"email"}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <TextBox
-                    fullWidth
-                    id="email"
-                    name="email"
-                    label="Email"
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                  />
-                )}
-              />
-              <FormHelperText className={styles.errorMessage}>
-                {errors?.email && errors.email.message}
-              </FormHelperText>
-            </div>
-            <div className="pb-5">
-              <Controller
-                control={control}
-                name={"phoneNumber"}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <TextBox
-                    fullWidth
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    label="Phone Number"
-                    value={value}
-                    type="number"
-                    onChange={onChange}
-                    onBlur={onBlur}
-                  />
-                )}
-              />
-              <FormHelperText className={styles.errorMessage}>
-                {errors?.phoneNumber && errors.phoneNumber.message}
-              </FormHelperText>
-            </div>
-            {
-              loggedInUsrType == ADMIN && dropDown()
-            }
-            <div className="flex w-full justify-center pb-4">
-              <span className={styles.gradeButtonWrapper}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  className={styles.loginButton}
-                  onClick={handleSubmit(onSubmit, onError)}
-                >
-                  {COPY.REGISTER}
-                </Button>
-              </span>
-            </div>
-          </main>
-        </div>
-        <Toster />
-      </form>
-    </section>
-    <BasicTable loading={loading} userList={userList}/>
-   </> 
+            <main
+              className={`${styles.backgroundColor} w-full max-w-md px-12 marginTop rounded mx-auto`}
+            >
+              <div className={styles.tenantLogoContainer}>
+                <img
+                  src="clair-logo-white.svg"
+                  alt={COPY.ALT_TEXT_LOGO}
+                  className="my-0 mx-auto my-auto"
+                />
+              </div>
+              <h5 className="text-center font-semibold text-main">
+                {COPY.REGISTER_USER}
+              </h5>
+              <div className="pb-3">
+                <Controller
+                  control={control}
+                  name={"firstName"}
+                  render={({ field: { onChange, value, onBlur } }) => (
+                    <TextBox
+                      fullWidth
+                      id="firstName"
+                      name="firstName"
+                      label="First Name"
+                      value={value}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                    />
+                  )}
+                />
+                <FormHelperText className={styles.errorMessage}>
+                  {errors?.firstName && errors.firstName.message}
+                </FormHelperText>
+              </div>
+              <div className="pb-3">
+                <Controller
+                  control={control}
+                  name={"lastName"}
+                  render={({ field: { onChange, value, onBlur } }) => (
+                    <TextBox
+                      fullWidth
+                      id="lastName"
+                      name="lastName"
+                      label="Last Name"
+                      value={value}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                    />
+                  )}
+                />
+                <FormHelperText className={styles.errorMessage}>
+                  {errors?.lastName && errors.lastName.message}
+                </FormHelperText>
+              </div>
+              <div className="pb-3">
+                <Controller
+                  control={control}
+                  name={"email"}
+                  render={({ field: { onChange, value, onBlur } }) => (
+                    <TextBox
+                      fullWidth
+                      id="email"
+                      name="email"
+                      label="Email"
+                      value={value}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                    />
+                  )}
+                />
+                <FormHelperText className={styles.errorMessage}>
+                  {errors?.email && errors.email.message}
+                </FormHelperText>
+              </div>
+              <div className="pb-5">
+                <Controller
+                  control={control}
+                  name={"phoneNumber"}
+                  render={({ field: { onChange, value, onBlur } }) => (
+                    <TextBox
+                      fullWidth
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      label="Phone Number"
+                      value={value}
+                      type="number"
+                      onChange={onChange}
+                      onBlur={onBlur}
+                    />
+                  )}
+                />
+                <FormHelperText className={styles.errorMessage}>
+                  {errors?.phoneNumber && errors.phoneNumber.message}
+                </FormHelperText>
+              </div>
+              {loggedInUsrType == ADMIN && dropDown()}
+              <div className="flex w-full justify-center pb-4">
+                <span className={styles.gradeButtonWrapper}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    className={styles.loginButton}
+                    onClick={handleSubmit(onSubmit, onError)}
+                  >
+                    {COPY.REGISTER}
+                  </Button>
+                </span>
+              </div>
+            </main>
+          </div>
+          <Toster />
+        </form>
+      </section>
+      <BasicTable loading={loading} userList={userList} />
+    </>
   );
 }
 export default withHeader(RegisterUser);

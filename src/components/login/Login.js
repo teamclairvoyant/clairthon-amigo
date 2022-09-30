@@ -54,6 +54,9 @@ function Login(props) {
     if(user !=={} && (user?.["custom:user_type"] == RECRUITER ||  user?.["custom:user_type"] == ADMIN)){
       goToRegister();
     }
+    if(user !=={} && user?.["custom:user_type"] == CANDIDATE){
+      navigate("/document");
+    }
   },[goToRegister]);
 
   const goToSetPassword = useCallback(
